@@ -1,91 +1,79 @@
 # 🎮 3D RPG Interactive Career Town Portfolio
 
-> **3D RPG 게임 캐릭터를 조작하며 개발자의 실제 일대기(학력, 직장 경력, 프로젝트)를 건물 형태로 탐험하는 인터랙티브 커리어 타운 포트폴리오**  
-> Based on [3D_RPG_Portfolio_Blueprint_v2.md](file:///D:/%E2%98%85.%20yooniron/PRJ/3d-rpg-portfolio/3D_RPG_Portfolio_Blueprint_v2.md)
+<p align="center">
+  <img src="https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/Three.js-r173-black?style=flat-square&logo=three.js" />
+  <img src="https://img.shields.io/badge/R3F-8.17-black?style=flat-square" />
+  <img src="https://img.shields.io/badge/Vite-5.4-646CFF?style=flat-square&logo=vite&logoColor=white" />
+  <img src="https://img.shields.io/badge/Zustand-5.0-brown?style=flat-square" />
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" />
+</p>
+
+> **Three.js & React Three Fiber 기반의 3D RPG 인터랙티브 공간을 탐험하며 개발자의 학력, 직무 경력, 프로젝트를 직관적으로 경험하는 차세대 웹 포트폴리오 엔진**
 
 ---
 
-## 🌟 핵심 기능 (Core Features)
+## 🌟 핵심 시스템 및 기술 아키텍처 (Key Technical Architecture)
 
-1. **🏛️ 3D 커리어 타운 & 메타포 건물 (Career Town Map)**
-   - **중앙 광장 (Central Plaza):** 스폰 지점, 전체 지도, 빠른 순간이동(Fast Travel), 조작 가이드 안내판
-   - **아카데미 도서관 (Academic Hall):** 대학 전공, 핵심 이수 교과목(A+ 성적), 캡스톤 디자인 수상, 학술 동아리 이력
-   - **A 테크 HQ 타워 (A-Tech Tower):** 대용량 B2B SaaS 및 핀테크 플랫폼 백엔드/풀스택 실무 경력 및 정량적 성과
-   - **B 넥스트 랩 (B-Next Labs):** WebGL 3D 데이터 시각화 및 인터랙티브 웹 개발 경력
-   - **프로젝트 아케이드 (Project Arcade):** 개인/사이드 프로젝트 쇼케이스, 라이브 데모 및 GitHub 코드 링크
-   - **타임라인 우체통 (Timeline Mailbox):** 커피챗 제안, 방명록 메시지 전송 및 연락처(Email, LinkedIn, GitHub, Blog)
+### 1. 🕹️ 하이브리드 플레이어 컨트롤러 (Hybrid Player Controller)
+* **다중 입력 파이프라인 (Multi-Input Pipeline)**:
+  * **데스크톱**: 키보드 `WASD` / 방향키 이동, `Shift` 달리기(Sprint), `E` / `Space` 상호작용
+  * **마우스 네비게이션**: Raycasting 기반 지면 클릭 이동 (Click-to-Move) 및 이동 경로 안내 링 연출
+  * **모바일 디바이스**: 멀티터치 인식 가상 온스크린 조이스틱 (Virtual Joystick) 지원
+* **3인칭 지능형 추적 카메라 (Lerp Follow Camera)**:
+  * 플레이어 아바타의 위치 변화와 이동 벡터를 실시간 보간(Linear Interpolation)하여 부드러운 3D 뷰포트 시야 제공
 
-2. **🕹️ 하이브리드 플레이어 컨트롤러 (Player Controller)**
-   - **키보드:** `W`, `A`, `S`, `D` / 방향키 이동, `Shift` 달리기(Sprint), `E` / `Space` / `Enter` 상호작용
-   - **마우스 네비게이션:** 지면 클릭 시 해당 위치로 자동 길찾기 이동 (Click-to-Move)
-   - **모바일 지원:** 온스크린 가상 터치 조이스틱 & 반응형 인터랙션 터치 버튼
-   - **3인칭 부드러운 카메라:** 아바타 이동을 부드럽게 추적하는 Lerp 팔로우 카메라
+### 2. 🏛️ 공간 메타포 및 근접 감지 시스템 (Spatial Metaphors & Proximity Sensors)
+* **영역별 3D 오브젝트 메타포**:
+  * 학력(아카데미), 실무 경력(테크 타워), 프로젝트(아케이드 랩), 연락처(가제보 우체통), 가이드(중앙 광장 분수대)
+* **거리 기반 인터랙션 트리거 (`TriggerZone`)**:
+  * 유클리디안 거리 연산을 통해 플레이어 접근 시 3D Billboard HTML 상호작용 배지 자동 노출 및 1-Click 진입 지원
 
-3. **🔄 3D 모험 ↔ 2D 이력서 듀얼 모드 (Dual Mode Switcher)**
-   - 3D RPG 탐험 모드와 채용 담당자/HR을 위한 **초고속 2D Executive Resume 뷰** 1클릭 전환 지원
-   - 브라우저 인쇄 및 PDF 저장 지원
+### 3. 🔄 3D 모험 ↔ 2D Executive Resume 듀얼 모드 (Dual-Engine System)
+* **게이밍 경험과 채용 UX의 완벽한 조화**:
+  * 3D 월드 탐험 모드와 채용 담당자(HR/Recruiter)를 위해 0.1초 만에 전환되는 **2D 모던 에디토리얼 이력서 뷰** 지원
+  * CSS Print Media Query 최적화를 통한 브라우저 원클릭 인쇄 및 고품질 PDF 내보내기 지원
 
-4. **🏆 RPG 퀘스트 & Web Audio BGM/효과음 (Gamification & Audio Engine)**
-   - 타운 내 주요 건물을 방문할 때마다 경험치(XP) 획득 및 퀘스트 달성
-   - 외부 파일 다운로드 필요 없는 자체 **Web Audio API 프로시저럴 사운드 신시사이저** 탑재 (Lo-Fi 앰비언트 BGM, 발소리, 모달 오픈 차임, 퀘스트 팡파르)
-   - 낮/노을/밤(Day/Sunset/Night) 대기 환경 조명 전환 지원
+### 4. 🎵 제로 에셋 프로시저럴 사운드 엔진 (Zero-Asset Web Audio API Synthesizer)
+* **외부 오디오 파일 의존성 제거**:
+  * 무거운 MP3/WAV 에셋 다운로드 없이 브라우저 자체 Web Audio API 오실레이터(Oscillator)를 통해 실시간 합성
+  * Lo-Fi 앰비언트 배경음(BGM) 및 발소리, 모달 오픈 차임, 퀘스트 달성 팡파르 효과음(SFX) 프로시저럴 생성
+
+### 5. ⚙️ 완전 데이터 주도형 아키텍처 (Data-Driven Single Source of Truth)
+* **데이터와 렌더링 계층의 완전한 분리**:
+  * 단일 데이터 스키마(`src/data/careerData.js`)와 Zustand 전역 상태를 기반으로 3D 월드의 건물 배치, 모달 팝업, 2D 이력서, 퀘스트 점수가 실시간 동기화되어 동작
 
 ---
 
-## 📂 프로젝트 구조 (Project Structure)
+## 🛠️ 기술 스택 (Tech Stack)
 
-```text
-3d-rpg-portfolio/
-├── index.html                           # 메타태그, 폰트 및 뷰포트
-├── vite.config.js                       # Vite 빌드 및 Three.js 청킹 최적화
-├── package.json                         # 의존성 설정
-├── 3D_RPG_Portfolio_Blueprint_v2.md     # 기획 블루프린트 명세서
-├── src/
-│   ├── main.jsx                         # React 엔트리포인트
-│   ├── App.jsx                          # 3D/2D 모드 라우팅 및 모달 매니저
-│   ├── index.css                        # 글래스모피즘 코어 디자인 시스템
-│   ├── data/
-│   │   └── careerData.js                # 학력, 경력, 프로젝트, 퀘스트 데이터
-│   ├── stores/
-│   │   └── useGameStore.js              # Zustand 게임 상태 관리
-│   ├── utils/
-│   │   └── soundEngine.js               # Web Audio API 사운드 신시사이저
-│   └── components/
-│       ├── 3d/
-│       │   ├── TownScene.jsx            # Canvas & 3D 월드 오케스트레이터
-│       │   ├── Environment.jsx          # 조명, 날씨(Day/Night), 도로, 나무, 가로등
-│       │   ├── Player.jsx               # 3D 아바타 & 플레이어 컨트롤러
-│       │   ├── TriggerZone.jsx          # 건물 입구 근접 감지 & 3D 플로팅 배지
-│       │   └── buildings/
-│       │       ├── CentralGuide.jsx     # 중앙 광장 가이드
-│       │       ├── SchoolBuilding.jsx   # 학교/아카데미 건물
-│       │       ├── CompanyBuilding.jsx  # 회사 타워 건물
-│       │       ├── ArcadeLab.jsx        # 프로젝트 아케이드 랩
-│       │       └── MailboxZone.jsx      # 타임라인 우체통
-│       └── ui/
-│           ├── HUD.jsx                  # 미니맵, 상단바, 퀘스트 위젯, 모바일 조이스틱
-│           ├── ResumeView2D.jsx         # 2D 이력서 뷰
-│           └── modals/
-│               ├── GuideModal.jsx       # 중앙 광장 가이드 모달
-│               ├── SchoolModal.jsx      # 학력/교과목 모달
-│               ├── CompanyModal.jsx     # 회사 경력 모달
-│               ├── ProjectModal.jsx     # 프로젝트 아케이드 모달
-│               ├── ContactModal.jsx     # 우체통 연락처 모달
-│               └── QuestModal.jsx       # 퀘스트 & 업적 모달
+| 구분 | 기술 스택 |
+| :--- | :--- |
+| **Frontend Framework** | React 18, Vite |
+| **3D Graphics & WebGL** | Three.js, @react-three/fiber (R3F), @react-three/drei |
+| **State Management** | Zustand |
+| **Styling & UI** | Modern Light Glassmorphism, Lucide React, Canvas Confetti |
+| **Audio Engine** | Web Audio API (Synthesizer Engine) |
+| **DevOps & CI/CD** | GitHub Actions, Git Rulesets |
+
+---
+
+## 🚀 빠른 시작 가이드 (Getting Started)
+
+### 1. 레포지토리 클론 및 의존성 설치
+```bash
+git clone https://github.com/yooniron/3d-rpg-portfolio.git
+cd 3d-rpg-portfolio
+npm install
 ```
 
----
-
-## 🚀 시작하기 (Getting Started)
-
-### 1. 개발 서버 실행
+### 2. 개발 서버 기동
 ```bash
-npm install
 npm run dev
 ```
-로컬 브라우저에서 `http://localhost:3000`으로 접속하여 인터랙티브 커리어 타운을 탐험할 수 있습니다.
+브라우저에서 `http://localhost:3000`으로 접속하여 인터랙티브 커리어 타운을 탐험할 수 있습니다.
 
-### 2. 프로덕션 빌드
+### 3. 프로덕션 빌드
 ```bash
 npm run build
 npm run preview
@@ -93,11 +81,32 @@ npm run preview
 
 ---
 
-## ✏️ 나만의 커리어 데이터로 수정하기 (Customization)
+## 📂 프로젝트 디렉토리 구조 (Project Structure)
 
-[`src/data/careerData.js`](file:///D:/%E2%98%85.%20yooniron/PRJ/3d-rpg-portfolio/src/data/careerData.js) 파일의 내용을 본인의 실제 프로필에 맞추어 수정하면 3D 건물 모달과 2D 이력서 뷰에 즉시 반영됩니다:
-
-- `developerProfile`: 이름, 직무, 소개글, 기술 스택, 소셜 링크(GitHub, LinkedIn, Blog, Email)
-- `careerData.school`: 출신 대학교, 전공, 학점, 핵심 이수 과목, 동아리 활동
-- `careerData.companies`: 재직 회사명, 기간, 담당 업무, 정량적 KPI 성과, 기술 스택
-- `careerData.projects`: 사이드/메인 프로젝트 소개, 해결 과제, Live Demo & GitHub 링크
+```text
+3d-rpg-portfolio/
+├── index.html                           # 메타태그 및 폰트 설정
+├── vite.config.js                       # Vite 번들러 및 청크 스플리팅 최적화
+├── package.json                         # 프로젝트 의존성
+├── src/
+│   ├── main.jsx                         # React 엔트리포인트
+│   ├── App.jsx                          # 3D/2D 라우팅 및 전역 모달 오케스트레이터
+│   ├── index.css                        # 글래스모피즘 디자인 토큰 및 스타일
+│   ├── data/
+│   │   └── careerData.js                # 커리어, 프로젝트, 퀘스트 데이터 스키마
+│   ├── stores/
+│   │   └── useGameStore.js              # Zustand 게임 상태 스토어
+│   ├── utils/
+│   │   └── soundEngine.js               # Web Audio API 사운드 신시사이저
+│   └── components/
+│       ├── 3d/
+│       │   ├── TownScene.jsx            # Canvas & 3D 씬 루트
+│       │   ├── Environment.jsx          # 날씨/조명/지형/식생 렌더러
+│       │   ├── Player.jsx               # 3D 아바타 & 플레이어 컨트롤러
+│       │   ├── TriggerZone.jsx          # 근접 감지 센서 & 플로팅 배지
+│       │   └── buildings/               # 5대 메타포 랜드마크 건물 컴포넌트
+│       └── ui/
+│           ├── HUD.jsx                  # 미니맵 레이더, 퀘스트 트래커, 상단바
+│           ├── ResumeView2D.jsx         # 2D Executive Resume 뷰
+│           └── modals/                  # 6개 글래스모피즘 상세 모달 팝업
+```
