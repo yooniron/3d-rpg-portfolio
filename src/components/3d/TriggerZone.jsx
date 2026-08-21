@@ -3,8 +3,8 @@ import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 
 /**
- * 3D Trigger Zone & Floating Indicator
- * Renders a glowing radial circle on the ground and an optional 3D HTML floating prompt
+ * 3D 트리거 존 및 플로팅 상호작용 인디케이터
+ * 플레이어 접근 시 지면 발광 링 및 3D HTML 상호작용 배지 렌더링
  */
 export const TriggerZone = ({ position, radius = 3.5, color = "#38bdf8", isNear = false, label = "Enter", onInteract }) => {
     const ringRef = useRef();
@@ -19,7 +19,7 @@ export const TriggerZone = ({ position, radius = 3.5, color = "#38bdf8", isNear 
 
     return (
         <group position={position}>
-            {/* Ground Glowing Halo */}
+            {/* 지면 발광 헤일로 링 */}
             <mesh ref={ringRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
                 <ringGeometry args={[radius * 0.7, radius, 32]} />
                 <meshBasicMaterial
@@ -30,7 +30,7 @@ export const TriggerZone = ({ position, radius = 3.5, color = "#38bdf8", isNear 
                 />
             </mesh>
 
-            {/* Floating 3D Text Badge when Player is Near */}
+            {/* 플레이어 접근 시 노출되는 3D HTML 텍스트 배지 */}
             {isNear && (
                 <Html position={[0, 2.8, 0]} center distanceFactor={18} zIndexRange={[100, 0]}>
                     <div

@@ -14,9 +14,9 @@ export const TownScene = () => {
     const setTargetMovePos = useGameStore((state) => state.setTargetMovePos);
     const activeModal = useGameStore((state) => state.activeModal);
 
-    // Ground click handler for Click-to-Move
+    // 지면 클릭 시 마우스 이동(Click-to-Move) 핸들러
     const handleGroundPointerDown = (e) => {
-        // If clicking on UI or modal is active, ignore
+        // 모달이 열려있는 경우 지면 클릭 무시
         if (activeModal) return;
         e.stopPropagation();
         if (e.point) {
@@ -31,10 +31,10 @@ export const TownScene = () => {
                 camera={{ position: [0, 14, 18], fov: 48, near: 0.1, far: 150 }}
                 gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
             >
-                {/* Environment, Sky & Lighting */}
+                {/* 대기 환경, 하늘 및 조명 렌더러 */}
                 <TownEnvironment />
 
-                {/* Raycast Target Plane for Click-to-Move */}
+                {/* 마우스 지면 클릭 이동 감지 레이캐스트 평면 */}
                 <mesh
                     rotation={[-Math.PI / 2, 0, 0]}
                     position={[0, 0.01, 0]}
@@ -45,20 +45,20 @@ export const TownScene = () => {
                     <meshBasicMaterial />
                 </mesh>
 
-                {/* 1. Central Plaza & Guide */}
+                {/* 1. 중앙 광장 및 가이드 안내판 */}
                 <CentralGuide
                     position={[0, 0, 0]}
                     onInteract={() => openModal('guide')}
                 />
 
-                {/* 2. School / Academy Building */}
+                {/* 2. 아카데미 도서관 건물 */}
                 <SchoolBuilding
                     position={[-18, 0, -14]}
                     onInteract={() => openModal('school')}
                 />
 
-                {/* 3. Company Town Buildings */}
-                {/* Company A: A-Tech HQ */}
+                {/* 3. 회사 직무 경력 건물 */}
+                {/* A회사: A-Tech HQ */}
                 <CompanyBuilding
                     id="company-a"
                     name="A-Tech HQ"
@@ -70,7 +70,7 @@ export const TownScene = () => {
                     onInteract={() => openModal('company-a')}
                 />
 
-                {/* Company B: B-Next Labs */}
+                {/* B회사: B-Next Labs */}
                 <CompanyBuilding
                     id="company-b"
                     name="B-Next Labs"
@@ -82,19 +82,19 @@ export const TownScene = () => {
                     onInteract={() => openModal('company-b')}
                 />
 
-                {/* 4. Project Arcade & Lab */}
+                {/* 4. 프로젝트 아케이드 랩 */}
                 <ArcadeLab
                     position={[-18, 0, 12]}
                     onInteract={() => openModal('arcade')}
                 />
 
-                {/* 5. Timeline Mailbox */}
+                {/* 5. 타임라인 우체통 */}
                 <MailboxZone
                     position={[0, 0, 18]}
                     onInteract={() => openModal('mailbox')}
                 />
 
-                {/* Player Avatar */}
+                {/* 플레이어 아바타 및 컨트롤러 */}
                 <Player />
             </Canvas>
         </div>

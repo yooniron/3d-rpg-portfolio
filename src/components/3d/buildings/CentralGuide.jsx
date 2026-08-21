@@ -22,31 +22,31 @@ export const CentralGuide = ({ position = [0, 0, 0], onInteract }) => {
 
     return (
         <group position={position}>
-            {/* Central Plaza Circular White Marble Platform */}
+            {/* 중앙 광장 대리석 원형 기단 */}
             <mesh position={[0, 0.1, 0]} receiveShadow>
                 <cylinderGeometry args={[5.5, 5.8, 0.2, 32]} />
                 <meshStandardMaterial color="#ffffff" roughness={0.3} metalness={0.1} />
             </mesh>
 
-            {/* Decorative Gold Outer Ring */}
+            {/* 장식용 골드 테두리 링 */}
             <mesh position={[0, 0.12, 0]} rotation={[-Math.PI / 2, 0, 0]}>
                 <ringGeometry args={[5.0, 5.3, 32]} />
                 <meshBasicMaterial color="#38bdf8" />
             </mesh>
 
-            {/* Center Fountain / Monument Pedestal (Ivory Marble) */}
+            {/* 분수대 및 중앙 조형물 석조 대좌 */}
             <mesh position={[0, 0.7, 0]} castShadow receiveShadow>
                 <cylinderGeometry args={[1.5, 1.8, 1.2, 16]} />
                 <meshStandardMaterial color="#f8fafc" roughness={0.2} metalness={0.1} />
             </mesh>
 
-            {/* Floating Center Core Crystal (Vibrant Cyan) */}
+            {/* 부유하는 중앙 코어 크리스탈 */}
             <mesh ref={crystalRef} position={[0, 2.4, 0]}>
                 <octahedronGeometry args={[0.7, 0]} />
                 <meshStandardMaterial color="#0284c7" emissive="#38bdf8" emissiveIntensity={0.6} />
             </mesh>
 
-            {/* Orbiting Tech Ring */}
+            {/* 회전하는 테크 궤도 링 */}
             <group position={[0, 2.4, 0]}>
                 <mesh ref={ringRef} rotation={[Math.PI / 3, 0, 0]}>
                     <torusGeometry args={[1.2, 0.05, 16, 32]} />
@@ -54,7 +54,7 @@ export const CentralGuide = ({ position = [0, 0, 0], onInteract }) => {
                 </mesh>
             </group>
 
-            {/* Guide Signboard (Bright Frosted) */}
+            {/* 가이드 안내판 UI 배지 */}
             <Html position={[0, 3.8, 0]} center distanceFactor={18}>
                 <div
                     style={{
@@ -77,7 +77,7 @@ export const CentralGuide = ({ position = [0, 0, 0], onInteract }) => {
                 </div>
             </Html>
 
-            {/* Trigger Zone */}
+            {/* 트리거 존 */}
             <TriggerZone
                 position={[0, 0, 0]}
                 radius={3.8}

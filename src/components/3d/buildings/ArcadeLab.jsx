@@ -18,19 +18,19 @@ export const ArcadeLab = ({ position = [-18, 0, 12], onInteract }) => {
 
     return (
         <group position={position}>
-            {/* Retro-Modern Arcade Base Structure (Clean White/Coral) */}
+            {/* 레트로 모던 아케이드 메인 구조물 (화이트/코랄) */}
             <mesh position={[0, 3, 0]} castShadow receiveShadow>
                 <boxGeometry args={[9, 6, 8]} />
                 <meshStandardMaterial color="#ffffff" roughness={0.3} metalness={0.1} />
             </mesh>
 
-            {/* Neon Framing Edges (Vibrant Amber / Coral) */}
+            {/* 네온 프레임 테두리 (엠버/코랄) */}
             <mesh position={[0, 6.1, 0]}>
                 <boxGeometry args={[9.2, 0.3, 8.2]} />
                 <meshStandardMaterial color="#f59e0b" />
             </mesh>
 
-            {/* Holographic Projector Ring on Roof */}
+            {/* 옥상 부유 홀로그램 프로젝터 링 */}
             <group position={[0, 7.5, 0]}>
                 <mesh ref={holoRingRef}>
                     <torusGeometry args={[1.5, 0.15, 16, 32]} />
@@ -42,15 +42,15 @@ export const ArcadeLab = ({ position = [-18, 0, 12], onInteract }) => {
                 </mesh>
             </group>
 
-            {/* Retro Arcade Cabinets in Front Porch */}
+            {/* 전면 아케이드 게임기 캐비닛 미니어처 */}
             {[-2.5, 2.5].map((x, i) => (
                 <group key={i} position={[x, 1.2, 4.3]}>
-                    {/* Cabinet Body */}
+                    {/* 게임기 캐비닛 바디 */}
                     <mesh castShadow>
                         <boxGeometry args={[1.2, 2.4, 1.2]} />
                         <meshStandardMaterial color={i === 0 ? "#38bdf8" : "#f43f5e"} />
                     </mesh>
-                    {/* Glowing Arcade Screen */}
+                    {/* 발광 아케이드 스크린 */}
                     <mesh position={[0, 0.4, 0.61]}>
                         <planeGeometry args={[0.9, 0.7]} />
                         <meshBasicMaterial color="#fef08a" />
@@ -58,13 +58,13 @@ export const ArcadeLab = ({ position = [-18, 0, 12], onInteract }) => {
                 </group>
             ))}
 
-            {/* Entrance Door */}
+            {/* 입구 아치문 */}
             <mesh position={[0, 1.5, 4.05]}>
                 <planeGeometry args={[2.5, 3.0]} />
                 <meshBasicMaterial color="#1e293b" />
             </mesh>
 
-            {/* Signboard (Bright Frosted) */}
+            {/* 간판 HTML 배지 */}
             <Html position={[0, 6.5, 4.5]} center distanceFactor={22}>
                 <div
                     style={{
@@ -83,7 +83,7 @@ export const ArcadeLab = ({ position = [-18, 0, 12], onInteract }) => {
                 </div>
             </Html>
 
-            {/* Interaction Trigger */}
+            {/* 상호작용 트리거 존 */}
             <TriggerZone
                 position={[0, 0, 5]}
                 radius={3.8}

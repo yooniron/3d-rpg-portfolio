@@ -1,6 +1,6 @@
 /**
- * 🎮 Career Town RPG Data Store
- * All career history, educational background, side projects, and quest metadata.
+ * 커리어 타운 RPG 데이터 스토어
+ * 학력, 직무 경력, 사이드 프로젝트 및 퀘스트 메타데이터
  */
 
 export const developerProfile = {
@@ -31,7 +31,7 @@ export const developerProfile = {
 };
 
 export const careerData = {
-    // 1. Academy / School Building Data
+    // 1. 학력 및 아카데미 건물 데이터
     school: {
         id: "school",
         buildingName: "아카데미 도서관 (Academic Hall)",
@@ -71,7 +71,7 @@ export const careerData = {
         ]
     },
 
-    // 2. Companies Office Buildings Data
+    // 2. 회사 직무 경력 건물 데이터
     companies: [
         {
             id: "company-a",
@@ -133,7 +133,7 @@ export const careerData = {
         }
     ],
 
-    // 3. Project Arcade & Lab Buildings
+    // 3. 프로젝트 아케이드 랩 건물 데이터
     projects: [
         {
             id: "project-1",
@@ -207,12 +207,14 @@ export const careerData = {
         }
     ],
 
-    // 4. Quests & Town Landmarks
+    // 4. 퀘스트 및 타운 랜드마크 데이터
     landmarks: [
         {
             id: "guide",
             name: "중앙 광장 안내판 (Central Plaza)",
             position: [0, 0, 0],
+            camOffset: [5.2, 4.8, 10.5],
+            camLookOffset: [0, 2.5, 0],
             color: "#38bdf8",
             icon: "🧭",
             description: "커리어 타운의 중심지이자 모험의 출발점입니다. 타운 맵과 조작 가이드를 확인할 수 있습니다."
@@ -221,6 +223,8 @@ export const careerData = {
             id: "school",
             name: "아카데미 도서관 (Academic Hall)",
             position: [-18, 0, -14],
+            camOffset: [6.5, 5.8, 12.0],
+            camLookOffset: [0, 3.8, 0],
             color: "#a855f7",
             icon: "🎓",
             description: "개발자의 대학 전공, 이수 과목, 알고리즘 학술 동아리 활동이 보관된 도서관입니다."
@@ -229,6 +233,8 @@ export const careerData = {
             id: "company-a",
             name: "A 테크 HQ 타워 (A-Tech HQ)",
             position: [18, 0, -14],
+            camOffset: [-7.0, 6.8, 13.5],
+            camLookOffset: [0, 5.2, 0],
             color: "#38bdf8",
             icon: "🏢",
             description: "대용량 B2B SaaS 및 핀테크 플랫폼을 개발한 A 테크놀로지 오피스입니다."
@@ -237,6 +243,8 @@ export const careerData = {
             id: "company-b",
             name: "B 넥스트 랩 (B-Next Labs)",
             position: [20, 0, 10],
+            camOffset: [-6.5, 6.0, 12.8],
+            camLookOffset: [0, 4.5, 0],
             color: "#06b6d4",
             icon: "🏛️",
             description: "WebGL 3D 데이터 시각화와 인터랙티브 웹을 개발한 B 솔루션즈 건물입니다."
@@ -245,6 +253,8 @@ export const careerData = {
             id: "arcade",
             name: "프로젝트 아케이드 (Project Arcade)",
             position: [-18, 0, 12],
+            camOffset: [6.0, 5.2, 11.5],
+            camLookOffset: [0, 3.5, 0],
             color: "#f59e0b",
             icon: "🕹️",
             description: "개발자가 직접 만든 혁신적인 웹/AI/클라우드 프로젝트 오락기들이 모여있는 연구소입니다."
@@ -253,6 +263,8 @@ export const careerData = {
             id: "mailbox",
             name: "타임라인 우체통 (Contact Mailbox)",
             position: [0, 0, 18],
+            camOffset: [4.8, 4.2, 9.8],
+            camLookOffset: [0, 2.2, 0],
             color: "#10b981",
             icon: "📮",
             description: "개발자에게 커피챗을 제안하거나 메시지를 남길 수 있는 소통의 우체통입니다."

@@ -18,13 +18,13 @@ export const SchoolBuilding = ({ position = [-18, 0, -14], onInteract }) => {
 
     return (
         <group position={position}>
-            {/* Main Academy Building Base (Clean Ivory) */}
+            {/* 아카데미 메인 건물 기단부 (아이보리 화이트) */}
             <mesh position={[0, 3.5, 0]} castShadow receiveShadow>
                 <boxGeometry args={[10, 7, 8]} />
                 <meshStandardMaterial color="#ffffff" roughness={0.3} metalness={0.05} />
             </mesh>
 
-            {/* Classical Stone Pillars (Front Entrance) */}
+            {/* 정면 입구 전면 기둥 */}
             {[-3.5, -1.2, 1.2, 3.5].map((x, i) => (
                 <mesh key={i} position={[x, 3.5, 4.3]} castShadow receiveShadow>
                     <cylinderGeometry args={[0.35, 0.45, 7, 16]} />
@@ -32,25 +32,25 @@ export const SchoolBuilding = ({ position = [-18, 0, -14], onInteract }) => {
                 </mesh>
             ))}
 
-            {/* Classical Triangular Pediment Roof (Royal Violet / Sapphire) */}
+            {/* 클래식 삼각 지붕 (사파이어 바이올렛) */}
             <mesh position={[0, 7.8, 0]} castShadow>
                 <cylinderGeometry args={[0.2, 7.5, 1.8, 4]} rotation={[0, Math.PI / 4, 0]} />
                 <meshStandardMaterial color="#6366f1" roughness={0.3} />
             </mesh>
 
-            {/* Clock / Knowledge Tower */}
+            {/* 상부 시계탑 / 지식 타워 */}
             <mesh position={[0, 9.2, 0]} castShadow>
                 <boxGeometry args={[3, 3, 3]} />
                 <meshStandardMaterial color="#f8fafc" roughness={0.3} />
             </mesh>
 
-            {/* Floating Magic Knowledge Crystal on Top */}
+            {/* 상단 부유하는 지식의 상징 크리스탈 */}
             <mesh ref={roofCrystalRef} position={[0, 11.5, 0]}>
                 <octahedronGeometry args={[1, 0]} />
                 <meshStandardMaterial color="#a855f7" emissive="#c084fc" emissiveIntensity={0.6} roughness={0.1} />
             </mesh>
 
-            {/* Glowing Warm Windows */}
+            {/* 전면 발광 창문 */}
             {[-2.5, 0, 2.5].map((x, i) => (
                 <mesh key={i} position={[x, 5.2, 4.05]}>
                     <planeGeometry args={[1.4, 1.6]} />
@@ -58,13 +58,13 @@ export const SchoolBuilding = ({ position = [-18, 0, -14], onInteract }) => {
                 </mesh>
             ))}
 
-            {/* Entrance Doorway Arch */}
+            {/* 정면 입구 아치문 */}
             <mesh position={[0, 1.8, 4.05]}>
                 <planeGeometry args={[2.4, 3.6]} />
                 <meshBasicMaterial color="#1e293b" />
             </mesh>
 
-            {/* Building Signboard HTML Title */}
+            {/* 건물 타이틀 HTML 배지 */}
             <Html position={[0, 7.2, 4.5]} center distanceFactor={22}>
                 <div
                     style={{
@@ -83,7 +83,7 @@ export const SchoolBuilding = ({ position = [-18, 0, -14], onInteract }) => {
                 </div>
             </Html>
 
-            {/* Entrance Trigger Zone */}
+            {/* 입구 상호작용 트리거 존 */}
             <TriggerZone
                 position={[0, 0, 4.8]}
                 radius={3.8}

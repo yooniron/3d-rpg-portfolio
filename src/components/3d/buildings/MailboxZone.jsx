@@ -18,31 +18,31 @@ export const MailboxZone = ({ position = [0, 0, 18], onInteract }) => {
 
     return (
         <group position={position}>
-            {/* White Stone Gazebo Base */}
+            {/* 화이트 석조 정자 기단부 */}
             <mesh position={[0, 0.2, 0]} receiveShadow>
                 <cylinderGeometry args={[3, 3.2, 0.4, 8]} />
                 <meshStandardMaterial color="#ffffff" />
             </mesh>
 
-            {/* Mailbox Pedestal */}
+            {/* 우체통 받침 기둥 */}
             <mesh position={[0, 1.2, 0]} castShadow>
                 <cylinderGeometry args={[0.3, 0.4, 1.8, 12]} />
                 <meshStandardMaterial color="#cbd5e1" />
             </mesh>
 
-            {/* Cheerful Emerald Mailbox Box */}
+            {/* 에메랄드 우체통 본체 */}
             <mesh position={[0, 2.2, 0]} castShadow>
                 <boxGeometry args={[1.2, 0.9, 1.4]} />
                 <meshStandardMaterial color="#10b981" metalness={0.2} roughness={0.2} />
             </mesh>
 
-            {/* Mailbox Curved Cap */}
+            {/* 우체통 둥근 지붕 캡 */}
             <mesh position={[0, 2.65, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
                 <cylinderGeometry args={[0.6, 0.6, 1.2, 16, 1, false, 0, Math.PI]} />
                 <meshStandardMaterial color="#059669" />
             </mesh>
 
-            {/* Floating Glowing Envelope Icon */}
+            {/* 상단 부유하는 편지 봉투 아이콘 */}
             <group ref={envelopeRef} position={[0, 3.2, 0]}>
                 <mesh>
                     <boxGeometry args={[0.8, 0.5, 0.1]} />
@@ -50,7 +50,7 @@ export const MailboxZone = ({ position = [0, 0, 18], onInteract }) => {
                 </mesh>
             </group>
 
-            {/* Lantern Posts */}
+            {/* 측면 가로등 기둥 */}
             {[-1.8, 1.8].map((x, i) => (
                 <group key={i} position={[x, 0, 0]}>
                     <mesh position={[0, 1.4, 0]}>
@@ -64,7 +64,7 @@ export const MailboxZone = ({ position = [0, 0, 18], onInteract }) => {
                 </group>
             ))}
 
-            {/* Signboard (Bright) */}
+            {/* 건물 간판 HTML 배지 */}
             <Html position={[0, 4.2, 0]} center distanceFactor={20}>
                 <div
                     style={{
@@ -83,7 +83,7 @@ export const MailboxZone = ({ position = [0, 0, 18], onInteract }) => {
                 </div>
             </Html>
 
-            {/* Interaction Proximity Zone */}
+            {/* 상호작용 트리거 존 */}
             <TriggerZone
                 position={[0, 0, 1.2]}
                 radius={3.2}

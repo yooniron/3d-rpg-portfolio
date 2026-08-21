@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ☀️ CAREER TOWN RPG - BRIGHT & VIBRANT MODERN LIGHT GLASS DESIGN SYSTEM
+   커리어 타운 RPG - 모던 라이트 글래스 디자인 시스템
    ========================================================================== */
 
 :root {
@@ -8,7 +8,7 @@
     --font-rpg: 'Cinzel', serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    /* Bright Light Color Tokens */
+    /* 밝은 색상 토큰 */
     --bg-dark: #f8fafc;
     --bg-card: rgba(255, 255, 255, 0.94);
     --bg-card-hover: #ffffff;
@@ -63,7 +63,7 @@ input, textarea, button {
     user-select: auto;
 }
 
-/* Scrollbar Styling (Clean Light) */
+/* 스크롤바 스타일링 */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -80,7 +80,7 @@ input, textarea, button {
 }
 
 /* ==========================================================================
-   🎮 3D CANVAS & HUD CONTAINER
+   3D 캔버스 및 HUD 컨테이너
    ========================================================================== */
 
 .rpg-app {
@@ -492,21 +492,21 @@ input, textarea, button {
 }
 
 /* ==========================================================================
-   🏛️ MODAL DIALOGS (Modern Bright Glassmorphism)
+   모달 다이얼로그 (모던 라이트 글래스모피즘)
    ========================================================================== */
 
 .modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.45);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.25) 0%, rgba(15, 23, 42, 0.65) 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
-    animation: fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes fade-in {
@@ -646,7 +646,7 @@ input, textarea, button {
 }
 
 /* ==========================================================================
-   📄 2D EXECUTIVE RESUME MODE VIEW (Editorial White Paper)
+   2D 이력서 모드 뷰 (에디토리얼 뷰)
    ========================================================================== */
 
 .resume-container {

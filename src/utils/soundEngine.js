@@ -1,7 +1,6 @@
 /**
- * 🎵 Procedural Web Audio Sound Engine
- * Synthesizes crisp UI sounds, magical quest fanfares, footsteps, and gentle ambient BGM
- * without requiring any external audio asset downloads.
+ * 프로시저럴 Web Audio 사운드 엔진
+ * 외부 오디오 에셋 다운로드 없이 UI 효과음, 퀘스트 팡파르, 발소리 및 앰비언트 BGM 실시간 합성
  */
 
 class SoundEngine {
@@ -160,7 +159,7 @@ class SoundEngine {
         } catch {}
     }
 
-    // Gentle RPG town lo-fi ambient melody
+    // 잔잔한 RPG 타운 로파이 앰비언트 멜로디 재생
     startBGM() {
         if (!this.ctx || this.isPlayingBGM) return;
         this.isPlayingBGM = true;

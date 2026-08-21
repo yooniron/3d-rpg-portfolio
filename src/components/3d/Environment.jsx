@@ -37,13 +37,13 @@ export const TownEnvironment = () => {
                     sunColor: '#fffbeb',
                     sunIntensity: 2.2,
                     sunPos: [20, 35, 20],
-                    groundColor: '#86efac', // Fresh vibrant meadow green
-                    roadColor: '#ffffff'     // Crisp white/ivory stone paved road
+                    groundColor: '#86efac', // 싱그러운 잔디밭 초록색
+                    roadColor: '#ffffff'     // 깨끗한 하얀색 보도블록 도로
                 };
         }
     }, [dayNight]);
 
-    // Trees positions
+    // 나무 위치 배열
     const treePositions = useMemo(() => [
         [-10, 0, -8], [-8, 0, -18], [-24, 0, -6], [-25, 0, -20],
         [10, 0, -8], [12, 0, -22], [25, 0, -6], [24, 0, -22],
@@ -51,7 +51,7 @@ export const TownEnvironment = () => {
         [10, 0, 8], [12, 0, 22], [26, 0, 20], [25, 0, 2]
     ], []);
 
-    // Flower patches positions
+    // 화단 및 꽃 화분 위치 배열
     const flowerPatches = useMemo(() => [
         [-6, 0, -11], [6, 0, -11],
         [-6, 0, 8], [6, 0, 8],
@@ -59,7 +59,7 @@ export const TownEnvironment = () => {
         [-4, 0, 16], [4, 0, 16]
     ], []);
 
-    // Street lamp positions
+    // 가로등 위치 배열
     const lampPositions = useMemo(() => [
         [-6, 0, -6], [6, 0, -6],
         [-6, 0, 6], [6, 0, 6],
@@ -70,10 +70,10 @@ export const TownEnvironment = () => {
 
     return (
         <>
-            {/* Sunny Sky Fog */}
+            {/* 대기 하늘 안개 효과 */}
             <fog attach="fog" args={[envConfig.fogColor, 25, 90]} />
 
-            {/* Hemisphere & Ambient Lighting for Brightness */}
+            {/* 조명 및 환경광 */}
             <hemisphereLight args={['#bae6fd', '#86efac', 0.8]} />
             <ambientLight color={envConfig.ambientColor} intensity={envConfig.ambientIntensity} />
 
@@ -92,42 +92,42 @@ export const TownEnvironment = () => {
                 shadow-bias={-0.0004}
             />
 
-            {/* Lush Fresh Meadow Ground */}
+            {/* 잔디 지형 평면 */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
                 <planeGeometry args={[160, 160]} />
                 <meshStandardMaterial color={envConfig.groundColor} roughness={0.7} />
             </mesh>
 
-            {/* Paved Stone Road Network (Crisp Ivory) */}
-            {/* North-South Main Boulevard */}
+            {/* 보도블록 도로 경계망 */}
+            {/* 남북 방향 메인 도로 */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]} receiveShadow>
                 <planeGeometry args={[5.2, 48]} />
                 <meshStandardMaterial color={envConfig.roadColor} roughness={0.4} />
             </mesh>
-            {/* East-West Avenue North */}
+            {/* 동서 방향 북측 도로 */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, -14]} receiveShadow>
                 <planeGeometry args={[48, 5.2]} />
                 <meshStandardMaterial color={envConfig.roadColor} roughness={0.4} />
             </mesh>
-            {/* East-West Avenue South */}
+            {/* 동서 방향 남측 도로 */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 11]} receiveShadow>
                 <planeGeometry args={[48, 5.2]} />
                 <meshStandardMaterial color={envConfig.roadColor} roughness={0.4} />
             </mesh>
 
-            {/* Road Curbs (Subtle Slate Border) */}
-            {/* North-South Curb Left */}
+            {/* 도로 경계석 라인 */}
+            {/* 남북 도로 좌측 경계석 */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-2.7, 0.025, 0]}>
                 <planeGeometry args={[0.25, 48]} />
                 <meshBasicMaterial color="#cbd5e1" />
             </mesh>
-            {/* North-South Curb Right */}
+            {/* 남북 도로 우측 경계석 */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2.7, 0.025, 0]}>
                 <planeGeometry args={[0.25, 48]} />
                 <meshBasicMaterial color="#cbd5e1" />
             </mesh>
 
-            {/* Colorful Flower Patches */}
+            {/* 화려한 화단 오컬트 */}
             {flowerPatches.map((pos, idx) => (
                 <group key={`flower-${idx}`} position={pos}>
                     {[-0.6, 0, 0.6].map((fx, fi) =>
@@ -143,15 +143,15 @@ export const TownEnvironment = () => {
                 </group>
             ))}
 
-            {/* Cheerful Low-Poly Birch/Pine Trees */}
+            {/* 로우폴리 나무 식생 오브젝트 */}
             {treePositions.map((pos, idx) => (
                 <group key={`tree-${idx}`} position={pos}>
-                    {/* Birch White/Amber Trunk */}
+                    {/* 기둥 */}
                     <mesh position={[0, 1.2, 0]} castShadow>
                         <cylinderGeometry args={[0.25, 0.35, 2.4, 6]} />
                         <meshStandardMaterial color="#fef3c7" roughness={0.8} />
                     </mesh>
-                    {/* Vibrant Foliage */}
+                    {/* 나뭇잎 */}
                     <mesh position={[0, 3.2, 0]} castShadow>
                         <coneGeometry args={[1.8, 2.6, 6]} />
                         <meshStandardMaterial color="#10b981" roughness={0.5} />
@@ -167,7 +167,7 @@ export const TownEnvironment = () => {
                 </group>
             ))}
 
-            {/* Elegant Modern White Streetlamps */}
+            {/* 모던 라이트 가로등 */}
             {lampPositions.map((pos, idx) => (
                 <group key={`lamp-${idx}`} position={pos}>
                     <mesh position={[0, 1.8, 0]} castShadow>
