@@ -34,7 +34,7 @@ export const HUD = () => {
     const joystickTouchId = useRef(null);
     const joystickStartPos = useRef({ x: 0, y: 0 });
 
-    // Handle Touch Joystick for Mobile
+    // 모바일 터치 가상 조이스틱 핸들러
     const handleTouchStart = (e) => {
         const touch = e.changedTouches[0];
         joystickTouchId.current = touch.identifier;
@@ -77,9 +77,9 @@ export const HUD = () => {
 
     return (
         <div className="hud-overlay">
-            {/* Top Bar */}
+            {/* 상단 컨트롤 바 */}
             <div className="hud-top-bar hud-interactive">
-                {/* Left: Player Profile Pill */}
+                {/* 좌측: 플레이어 프로필 카드 */}
                 <div className="player-card-badge">
                     <div className="avatar-circle">Y</div>
                     <div className="player-info-text">
@@ -91,9 +91,9 @@ export const HUD = () => {
                     </div>
                 </div>
 
-                {/* Right: Control Actions */}
+                {/* 우측: 컨트롤 버튼 액션 모음 */}
                 <div className="hud-actions">
-                    {/* Day / Sunset / Night Toggle */}
+                    {/* 시간대 조명 전환 (낮/노을/밤) */}
                     <button
                         className="glass-btn icon-btn"
                         onClick={cycleDayNight}
@@ -104,7 +104,7 @@ export const HUD = () => {
                         {dayNight === 'night' && <Moon size={17} color="#4f46e5" />}
                     </button>
 
-                    {/* Audio BGM / SFX Toggle */}
+                    {/* 오디오 BGM 및 사운드 효과음 토글 */}
                     <button
                         className="glass-btn icon-btn"
                         onClick={toggleSound}
@@ -113,19 +113,19 @@ export const HUD = () => {
                         {soundEnabled ? <Volume2 size={17} color="#059669" /> : <VolumeX size={17} color="#64748b" />}
                     </button>
 
-                    {/* Guide & Teleport Modal */}
+                    {/* 타운 가이드 모달 */}
                     <button className="glass-btn" onClick={() => openModal('guide')}>
                         <Compass size={15} color="#0284c7" />
                         <span>타운 가이드</span>
                     </button>
 
-                    {/* Quest Log Modal */}
+                    {/* 퀘스트 업적 모달 */}
                     <button className="glass-btn" onClick={() => openModal('quest')}>
                         <Trophy size={15} color="#d97706" />
                         <span>퀘스트 ({completedCount}/{totalQuests})</span>
                     </button>
 
-                    {/* Spawn Reset */}
+                    {/* 스폰 지점 리셋 귀환 */}
                     <button
                         className="glass-btn icon-btn"
                         onClick={() => teleportTo([0, 0, 4])}
@@ -134,7 +134,7 @@ export const HUD = () => {
                         <RotateCcw size={16} color="#0f172a" />
                     </button>
 
-                    {/* Mode Switcher: 2D Resume */}
+                    {/* 2D 이력서 모드 전환 */}
                     <button className="glass-btn primary" onClick={() => setMode('2D')}>
                         <FileText size={15} />
                         <span>2D 이력서 뷰</span>
@@ -142,7 +142,7 @@ export const HUD = () => {
                 </div>
             </div>
 
-            {/* Center Floating Proximity Prompt */}
+            {/* 중앙 근접 상호작용 프롬프트 */}
             {nearbyBuilding && (
                 <div className="interaction-prompt-container hud-interactive" onClick={() => openModal(nearbyBuilding.id)}>
                     <div className="interaction-pill">
@@ -154,13 +154,13 @@ export const HUD = () => {
                 </div>
             )}
 
-            {/* Bottom Bar */}
+            {/* 하단 컨트롤 바 */}
             <div className="hud-bottom-bar hud-interactive">
-                {/* Left: Minimap Radar */}
+                {/* 좌측: 미니맵 레이더 */}
                 <div className="minimap-card">
                     <div className="minimap-radar">
                         <div className="minimap-grid" />
-                        {/* Player Center Blip */}
+                        {/* 플레이어 위치 블루 블립 */}
                         <div
                             className="minimap-center-cross"
                             style={{
@@ -169,7 +169,7 @@ export const HUD = () => {
                             }}
                         />
 
-                        {/* Landmark Blips */}
+                        {/* 랜드마크 스팟 블립 */}
                         {careerData.landmarks.map((lm) => (
                             <div
                                 key={lm.id}
@@ -187,7 +187,7 @@ export const HUD = () => {
                     </div>
                 </div>
 
-                {/* Center: Controls Hint Bar (Desktop) */}
+                {/* 중앙: 조작 키 가이드 바 */}
                 <div className="controls-hint-bar">
                     <div><span className="control-key">WASD</span> 이동</div>
                     <div><span className="control-key">Shift</span> 달리기</div>
@@ -195,7 +195,7 @@ export const HUD = () => {
                     <div><span className="control-key">Click</span> 지면 이동</div>
                 </div>
 
-                {/* Right: Collapsible Quest Tracker */}
+                {/* 우측: 퀘스트 위젯 위젯 */}
                 <div className="quest-widget">
                     <div className="quest-header">
                         <div className="quest-title" onClick={() => openModal('quest')} style={{ cursor: 'pointer' }}>
@@ -233,7 +233,7 @@ export const HUD = () => {
                 </div>
             </div>
 
-            {/* Mobile Touch Virtual Joystick Zone */}
+            {/* 모바일 가상 조이스틱 터치 영역 */}
             <div
                 className="mobile-joystick-zone"
                 onTouchStart={handleTouchStart}

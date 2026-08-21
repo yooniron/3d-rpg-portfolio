@@ -19,7 +19,7 @@ export const ResumeView2D = () => {
     return (
         <div className="resume-container">
             <div className="resume-wrapper">
-                {/* Navigation Bar */}
+                {/* 상단 상호작용 내비게이션 바 */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <button className="glass-btn primary" onClick={() => setMode('3D')}>
                         <Gamepad2 size={16} /> 3D 커리어 타운 모드로 돌아가기
@@ -29,7 +29,7 @@ export const ResumeView2D = () => {
                     </button>
                 </div>
 
-                {/* Profile Header */}
+                {/* 프로필 헤더 정보 */}
                 <div className="resume-header">
                     <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
@@ -72,7 +72,7 @@ export const ResumeView2D = () => {
                     </div>
                 </div>
 
-                {/* Core Skills Matrix */}
+                {/* 핵심 기술 스택 매트릭스 */}
                 <div className="resume-section">
                     <h2 className="resume-section-title">
                         <Code2 size={20} color="#0284c7" /> 핵심 기술 스택 (Technical Skills)
@@ -105,7 +105,7 @@ export const ResumeView2D = () => {
                     </div>
                 </div>
 
-                {/* Work Experience */}
+                {/* 직장 경력 내역 */}
                 <div className="resume-section">
                     <h2 className="resume-section-title">
                         <Briefcase size={20} color="#0284c7" /> 직장 경력 (Work Experience)
@@ -142,7 +142,7 @@ export const ResumeView2D = () => {
                     </div>
                 </div>
 
-                {/* Featured Projects */}
+                {/* 주요 프로젝트 내역 */}
                 <div className="resume-section">
                     <h2 className="resume-section-title">
                         <Sparkles size={20} color="#d97706" /> 주요 프로젝트 (Featured Projects)
@@ -184,7 +184,7 @@ export const ResumeView2D = () => {
                     </div>
                 </div>
 
-                {/* Education & Foundation */}
+                {/* 학력 및 자격 이력 */}
                 <div className="resume-section">
                     <h2 className="resume-section-title">
                         <GraduationCap size={20} color="#7c3aed" /> 학력 및 자격 (Education & Certifications)

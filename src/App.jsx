@@ -16,7 +16,7 @@ export const App = () => {
     const closeModal = useGameStore((state) => state.closeModal);
     const teleportTo = useGameStore((state) => state.teleportTo);
 
-    // Auto-open welcome guide on first visit
+    // 첫 방문 시 가이드 모달 자동 오픈
     useEffect(() => {
         const hasVisited = sessionStorage.getItem('career_town_visited');
         if (!hasVisited) {
@@ -29,13 +29,13 @@ export const App = () => {
         <main className="rpg-app">
             {mode === '3D' ? (
                 <>
-                    {/* 3D WebGL Town Scene */}
+                    {/* 3D WebGL 타운 씬 */}
                     <TownScene />
 
-                    {/* Interactive HUD Overlay */}
+                    {/* 인터랙티브 HUD 오버레이 */}
                     <HUD />
 
-                    {/* Active Modal Dialogs */}
+                    {/* 모달 다이얼로그 모음 */}
                     {activeModal === 'guide' && <GuideModal onClose={closeModal} onTeleport={teleportTo} />}
                     {activeModal === 'school' && <SchoolModal onClose={closeModal} />}
                     {activeModal === 'company-a' && <CompanyModal companyId="company-a" onClose={closeModal} />}
@@ -45,7 +45,7 @@ export const App = () => {
                     {activeModal === 'quest' && <QuestModal onClose={closeModal} onTeleport={teleportTo} />}
                 </>
             ) : (
-                /* 2D Clean Executive Resume Mode */
+                /* 2D 에디토리얼 이력서 모드 */
                 <ResumeView2D />
             )}
         </main>

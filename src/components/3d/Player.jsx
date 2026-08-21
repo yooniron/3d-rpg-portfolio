@@ -22,6 +22,7 @@ export const Player = () => {
     const setNearbyBuilding = useGameStore((state) => state.setNearbyBuilding);
     const openModal = useGameStore((state) => state.openModal);
     const activeModal = useGameStore((state) => state.activeModal);
+    const cinematicTarget = useGameStore((state) => state.cinematicTarget);
     const targetMovePos = useGameStore((state) => state.targetMovePos);
     const setTargetMovePos = useGameStore((state) => state.setTargetMovePos);
     const teleportTarget = useGameStore((state) => state.teleportTarget);
@@ -216,10 +217,41 @@ export const Player = () => {
 
         setNearbyBuilding(closestBuilding);
 
-        if (!activeModal) {
+        // 3D 시네마틱 카메라 시스템 및 줌인 포커스 엔진 (60FPS 고급 슬로우 글라이딩)
+        const targetModalId = activeModal || cinematicTarget;
+        const dampFactor = 1 - Math.exp(-2.8 * delta);
+
+        if (targetModalId) {
+            const landmark = careerData.landmarks.find((l) => l.id === targetModalId);
+            if (landmark) {
+                const camOff = landmark.camOffset || [0, 2.2, 9.0];
+                const lookOff = landmark.camLookOffset || [0, 4.5, 0];
+
+                const targetCamPos = new THREE.Vector3(
+                    landmark.position[0] + camOff[0],
+                    landmark.position[1] + camOff[1],
+                    landmark.position[2] + camOff[2]
+                );
+                camera.position.lerp(targetCamPos, dampFactor);
+
+                const lookTarget = new THREE.Vector3(
+                    landmark.position[0] + lookOff[0],
+                    landmark.position[1] + lookOff[1],
+                    landmark.position[2] + lookOff[2]
+                );
+                camera.lookAt(lookTarget);
+
+                // 45도 대각선 입체 와이드 관찰 시야각 (50도 -> 48도)
+                if (Math.abs(camera.fov - 48) > 0.05) {
+                    camera.fov = THREE.MathUtils.lerp(camera.fov, 48, dampFactor);
+                    camera.updateProjectionMatrix();
+                }
+            }
+        } else {
+            // 평상시 탐험 모드 카메라 추적 (시야각 50도)
             const cameraOffset = new THREE.Vector3(0, 11, 14);
             const targetCamPos = new THREE.Vector3().addVectors(playerState.current.pos, cameraOffset);
-            camera.position.lerp(targetCamPos, delta * 4.5);
+            camera.position.lerp(targetCamPos, dampFactor);
 
             const lookTarget = new THREE.Vector3(
                 playerState.current.pos.x,
@@ -227,6 +259,11 @@ export const Player = () => {
                 playerState.current.pos.z
             );
             camera.lookAt(lookTarget);
+
+            if (Math.abs(camera.fov - 50) > 0.05) {
+                camera.fov = THREE.MathUtils.lerp(camera.fov, 50, dampFactor);
+                camera.updateProjectionMatrix();
+            }
         }
     });
 

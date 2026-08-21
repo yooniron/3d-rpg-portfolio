@@ -28,7 +28,7 @@ export const CompanyBuilding = ({
 
     return (
         <group position={position}>
-            {/* Skyscraper Main Glass/Steel Body (Clean Light Blue Glass) */}
+            {/* 고층 타워 메인 글래스 메인 바디 */}
             <mesh position={[0, height / 2, 0]} castShadow receiveShadow>
                 <boxGeometry args={[width, height, depth]} />
                 <meshStandardMaterial
@@ -38,7 +38,7 @@ export const CompanyBuilding = ({
                 />
             </mesh>
 
-            {/* Modern Accent Corner Pillars */}
+            {/* 메인 외곽 기둥 파사드 */}
             {[-width / 2, width / 2].map((x, xi) =>
                 [-depth / 2, depth / 2].map((z, zi) => (
                     <mesh key={`${xi}-${zi}`} position={[x, height / 2, z]}>
@@ -48,7 +48,7 @@ export const CompanyBuilding = ({
                 ))
             )}
 
-            {/* Vibrant Office Window Strips */}
+            {/* 층별 사무실 창문 밴드 */}
             {Array.from({ length: floors }).map((_, f) => (
                 <mesh key={f} position={[0, 2.5 + f * (height / floors), depth / 2 + 0.05]}>
                     <planeGeometry args={[width * 0.85, 1.3]} />
@@ -56,13 +56,13 @@ export const CompanyBuilding = ({
                 </mesh>
             ))}
 
-            {/* Rooftop Helipad / Tech Array */}
+            {/* 옥상 헬리패드 구조물 */}
             <mesh position={[0, height + 0.3, 0]} receiveShadow>
                 <boxGeometry args={[width * 0.85, 0.6, depth * 0.85]} />
                 <meshStandardMaterial color="#e2e8f0" />
             </mesh>
 
-            {/* Rooftop Antenna Beacon */}
+            {/* 옥상 안테나 크리스탈 비콘 */}
             <group position={[0, height + 1.2, 0]}>
                 <mesh position={[0, 1.2, 0]}>
                     <cylinderGeometry args={[0.1, 0.2, 2.4, 8]} />
@@ -74,7 +74,7 @@ export const CompanyBuilding = ({
                 </mesh>
             </group>
 
-            {/* Modern Entrance Canopy */}
+            {/* 모던 캐노피 입구 */}
             <mesh position={[0, 2.2, depth / 2 + 1.2]} castShadow>
                 <boxGeometry args={[4, 0.3, 2.2]} />
                 <meshStandardMaterial color="#ffffff" metalness={0.2} />
@@ -84,7 +84,7 @@ export const CompanyBuilding = ({
                 <meshBasicMaterial color="#38bdf8" />
             </mesh>
 
-            {/* 3D Floating Name Signboard (Bright) */}
+            {/* 건물 간판 HTML 배지 */}
             <Html position={[0, height + 0.8, depth / 2 + 0.2]} center distanceFactor={22}>
                 <div
                     style={{
@@ -103,7 +103,7 @@ export const CompanyBuilding = ({
                 </div>
             </Html>
 
-            {/* Interaction Proximity Zone */}
+            {/* 상호작용 트리거 존 */}
             <TriggerZone
                 position={[0, 0, depth / 2 + 2.2]}
                 radius={3.8}
