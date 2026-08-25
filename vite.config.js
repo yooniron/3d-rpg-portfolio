@@ -9,6 +9,11 @@ export default defineConfig({
         open: false,
         host: true
     },
+    test: {
+        globals: true,
+        environment: 'jsdom',
+        setupFiles: './src/__tests__/setup.js'
+    },
     build: {
         chunkSizeWarningLimit: 1200,
         rollupOptions: {

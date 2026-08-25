@@ -1,0 +1,31 @@
+name: 🚀 3D RPG Portfolio CI & Automated Test Suite
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-build:
+    name: 🧪 Run Vitest & Production Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🧪 Run Vitest Automated Unit Tests
+        run: npm test
+
+      - name: 🏗️ Test Production Vite Build
+        run: npm run build
