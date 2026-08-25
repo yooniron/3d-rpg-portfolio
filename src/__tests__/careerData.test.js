@@ -3,13 +3,13 @@ import { developerProfile, careerData } from '../data/careerData';
 
 describe('Data-Driven Single Source of Truth (careerData.js)', () => {
     it('개발자 프로필 정보가 올바르게 구성되어 있어야 한다', () => {
-        expect(developerProfile.name).toBe('Yooniron');
+        expect(developerProfile.name).toBe('노윤철 (yooniron)');
         expect(developerProfile.title).toContain('Full-Stack');
-        expect(developerProfile.email).toBe('yooniron.dev@gmail.com');
+        expect(developerProfile.email).toBe('dbscjf324@gmail.com');
+        expect(developerProfile.blog).toBe('https://yooniron.tistory.com/');
         expect(developerProfile.skills.frontend).toContain('React');
-        expect(developerProfile.skills.frontend).toContain('Three.js / R3F');
-        expect(developerProfile.skills.backend).toContain('Node.js');
-        expect(developerProfile.skills.devops).toContain('Docker');
+        expect(developerProfile.skills.backend).toContain('Java');
+        expect(developerProfile.skills.devops).toContain('Kubernetes');
     });
 
     it('3D 타운 랜드마크 6종 데이터 무결성이 검증되어야 한다', () => {

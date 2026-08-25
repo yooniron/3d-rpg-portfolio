@@ -5,7 +5,7 @@ import {
     Gamepad2,
     Mail,
     Github,
-    Linkedin,
+    BookOpen,
     Briefcase,
     GraduationCap,
     Sparkles,
@@ -62,12 +62,12 @@ export const ResumeView2D = () => {
                             <Github size={14} color="#0f172a" /> GitHub Profile
                         </a>
                         <a
-                            href={developerProfile.linkedin}
+                            href={developerProfile.blog}
                             target="_blank"
                             rel="noreferrer"
                             style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#475569', fontSize: '12px', textDecoration: 'none', fontWeight: 600 }}
                         >
-                            <Linkedin size={14} color="#0284c7" /> LinkedIn Profile
+                            <BookOpen size={14} color="#f75f00" /> Tistory Tech Blog
                         </a>
                     </div>
                 </div>
