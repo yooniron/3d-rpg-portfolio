@@ -7,6 +7,8 @@ import { SchoolBuilding } from './buildings/SchoolBuilding';
 import { CompanyBuilding } from './buildings/CompanyBuilding';
 import { ArcadeLab } from './buildings/ArcadeLab';
 import { MailboxZone } from './buildings/MailboxZone';
+import { NPC } from './NPC';
+import { npcTemplates } from '../../data/npcTemplates';
 import { useGameStore } from '../../stores/useGameStore';
 
 export const TownScene = () => {
@@ -93,6 +95,11 @@ export const TownScene = () => {
                     position={[0, 0, 18]}
                     onInteract={() => openModal('mailbox')}
                 />
+
+                {/* 6. 3D 인터랙티브 NPC 3종 */}
+                {npcTemplates.map((npc) => (
+                    <NPC key={npc.id} npc={npc} />
+                ))}
 
                 {/* 플레이어 아바타 및 컨트롤러 */}
                 <Player />

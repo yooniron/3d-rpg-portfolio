@@ -40,6 +40,36 @@ export const useGameStore = create((set, get) => ({
         set({ activeModal: null, modalData: null, cinematicTarget: null });
     },
 
+    // 3D NPC 대화 모달 상태 및 액션
+    activeNPC: null, // null | npcTemplate 객체
+    nearbyNPC: null, // 근접한 NPC 객체
+    talkedNPCs: [],  // 대화를 완료한 NPC ID 목록
+    setNearbyNPC: (npc) => {
+        const current = get().nearbyNPC;
+        if (npc && (!current || current.id !== npc.id)) {
+            soundEngine.playHover();
+        }
+        set({ nearbyNPC: npc });
+    },
+    openNPCModal: (npc) => {
+        soundEngine.playModalOpen();
+        set({ activeNPC: npc });
+    },
+    closeNPCModal: () => {
+        soundEngine.playModalClose();
+        set({ activeNPC: null });
+    },
+    talkToNPC: (npcId) => {
+        const { talkedNPCs, questPoints } = get();
+        if (!talkedNPCs.includes(npcId)) {
+            soundEngine.playQuestComplete();
+            set({
+                talkedNPCs: [...talkedNPCs, npcId],
+                questPoints: questPoints + 50
+            });
+        }
+    },
+
     // 근접 감지 및 상호작용
     nearbyBuilding: null, // 플레이어가 건물 근처에 접근했을 때의 랜드마크 객체
     setNearbyBuilding: (building) => {
