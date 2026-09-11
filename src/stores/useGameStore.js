@@ -10,6 +10,18 @@ export const useGameStore = create((set, get) => ({
         set({ mode });
     },
 
+    // 동적 3D 조명 시간대 & 파티클 날씨 제어
+    timeOfDay: 'day', // 'day' | 'sunset' | 'night'
+    weather: 'sunny', // 'sunny' | 'rain' | 'snow' | 'sakura'
+    setTimeOfDay: (timeOfDay) => {
+        soundEngine.playClick();
+        set({ timeOfDay });
+    },
+    setWeather: (weather) => {
+        soundEngine.playClick();
+        set({ weather });
+    },
+
     // 활성 모달 다이얼로그 및 시네마틱 카메라 시퀀서
     activeModal: null, // null | 'guide' | 'school' | 'company-a' | 'company-b' | 'arcade' | 'mailbox' | 'quest' | 'badges'
     modalData: null,

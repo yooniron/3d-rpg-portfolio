@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { TownEnvironment } from './Environment';
+import { WeatherParticles } from './WeatherParticles';
 import { Player } from './Player';
 import { CentralGuide } from './buildings/CentralGuide';
 import { SchoolBuilding } from './buildings/SchoolBuilding';
@@ -35,6 +36,9 @@ export const TownScene = () => {
             >
                 {/* 대기 환경, 하늘 및 조명 렌더러 */}
                 <TownEnvironment />
+
+                {/* 3D 동적 파티클 날씨 에미터 (빗줄기, 눈송이, 벚꽃잎, 먼지) */}
+                <WeatherParticles />
 
                 {/* 마우스 지면 클릭 이동 감지 레이캐스트 평면 */}
                 <mesh

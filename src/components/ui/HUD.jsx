@@ -7,6 +7,9 @@ import {
     Sun,
     Moon,
     Sunset,
+    CloudRain,
+    Snowflake,
+    Sparkles,
     Compass,
     Trophy,
     FileText,
@@ -20,8 +23,10 @@ export const HUD = () => {
     const setMode = useGameStore((state) => state.setMode);
     const soundEnabled = useGameStore((state) => state.soundEnabled);
     const toggleSound = useGameStore((state) => state.toggleSound);
-    const dayNight = useGameStore((state) => state.dayNight);
-    const cycleDayNight = useGameStore((state) => state.cycleDayNight);
+    const timeOfDay = useGameStore((state) => state.timeOfDay);
+    const setTimeOfDay = useGameStore((state) => state.setTimeOfDay);
+    const weather = useGameStore((state) => state.weather);
+    const setWeather = useGameStore((state) => state.setWeather);
     const nearbyBuilding = useGameStore((state) => state.nearbyBuilding);
     const openModal = useGameStore((state) => state.openModal);
     const teleportTo = useGameStore((state) => state.teleportTo);
@@ -96,12 +101,30 @@ export const HUD = () => {
                     {/* 시간대 조명 전환 (낮/노을/밤) */}
                     <button
                         className="glass-btn icon-btn"
-                        onClick={cycleDayNight}
-                        title={`현재 테마: ${dayNight.toUpperCase()} (클릭하여 변경)`}
+                        onClick={() => {
+                            const nextTime = timeOfDay === 'day' ? 'sunset' : (timeOfDay === 'sunset' ? 'night' : 'day');
+                            setTimeOfDay(nextTime);
+                        }}
+                        title={`시간대 변경 (현재: ${timeOfDay.toUpperCase()})`}
                     >
-                        {dayNight === 'day' && <Sun size={17} color="#d97706" />}
-                        {dayNight === 'sunset' && <Sunset size={17} color="#ea580c" />}
-                        {dayNight === 'night' && <Moon size={17} color="#4f46e5" />}
+                        {timeOfDay === 'day' && <Sun size={17} color="#eab308" />}
+                        {timeOfDay === 'sunset' && <Sunset size={17} color="#f97316" />}
+                        {timeOfDay === 'night' && <Moon size={17} color="#818cf8" />}
+                    </button>
+
+                    {/* 3D 파티클 날씨 전환 (맑음/비/눈/벚꽃) */}
+                    <button
+                        className="glass-btn icon-btn"
+                        onClick={() => {
+                            const nextWeather = weather === 'sunny' ? 'rain' : (weather === 'rain' ? 'snow' : (weather === 'snow' ? 'sakura' : 'sunny'));
+                            setWeather(nextWeather);
+                        }}
+                        title={`3D 날씨 변경 (현재: ${weather.toUpperCase()})`}
+                    >
+                        {weather === 'sunny' && <Sun size={17} color="#fef08a" />}
+                        {weather === 'rain' && <CloudRain size={17} color="#38bdf8" />}
+                        {weather === 'snow' && <Snowflake size={17} color="#e2e8f0" />}
+                        {weather === 'sakura' && <Sparkles size={17} color="#f472b6" />}
                     </button>
 
                     {/* 오디오 BGM 및 사운드 효과음 토글 */}
