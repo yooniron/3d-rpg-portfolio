@@ -2,46 +2,68 @@ import React, { useMemo } from 'react';
 import { useGameStore } from '../../stores/useGameStore';
 
 export const TownEnvironment = () => {
-    const dayNight = useGameStore((state) => state.dayNight);
+    const timeOfDay = useGameStore((state) => state.timeOfDay);
+    const weather = useGameStore((state) => state.weather);
 
     const envConfig = useMemo(() => {
-        switch (dayNight) {
+        let base = {
+            fogColor: '#bae6fd',
+            ambientColor: '#ffffff',
+            ambientIntensity: 1.4,
+            sunColor: '#fffbeb',
+            sunIntensity: 2.2,
+            sunPos: [20, 35, 20],
+            groundColor: '#86efac',
+            roadColor: '#ffffff'
+        };
+
+        // 1. 시간대별 조명 및 안개 설정
+        switch (timeOfDay) {
             case 'sunset':
-                return {
-                    fogColor: '#fed7aa',
+                base = {
+                    fogColor: '#fdba74',
                     ambientColor: '#ffedd5',
-                    ambientIntensity: 0.9,
+                    ambientIntensity: 0.95,
                     sunColor: '#f97316',
-                    sunIntensity: 1.8,
-                    sunPos: [25, 15, 20],
+                    sunIntensity: 1.9,
+                    sunPos: [35, 12, 20],
                     groundColor: '#bbf7d0',
                     roadColor: '#fef3c7'
                 };
+                break;
             case 'night':
-                return {
-                    fogColor: '#1e1b4b',
-                    ambientColor: '#312e81',
-                    ambientIntensity: 0.6,
+                base = {
+                    fogColor: '#0f172a',
+                    ambientColor: '#1e1b4b',
+                    ambientIntensity: 0.5,
                     sunColor: '#818cf8',
-                    sunIntensity: 0.9,
+                    sunIntensity: 0.7,
                     sunPos: [15, 25, 15],
-                    groundColor: '#0f172a',
+                    groundColor: '#090d16',
                     roadColor: '#1e293b'
                 };
+                break;
             case 'day':
             default:
-                return {
-                    fogColor: '#bae6fd',
-                    ambientColor: '#ffffff',
-                    ambientIntensity: 1.4,
-                    sunColor: '#fffbeb',
-                    sunIntensity: 2.2,
-                    sunPos: [20, 35, 20],
-                    groundColor: '#86efac', // 싱그러운 잔디밭 초록색
-                    roadColor: '#ffffff'     // 깨끗한 하얀색 보도블록 도로
-                };
+                break;
         }
-    }, [dayNight]);
+
+        // 2. 날씨별 조명 보정
+        if (weather === 'rain') {
+            base.fogColor = timeOfDay === 'night' ? '#020617' : '#94a3b8';
+            base.ambientIntensity *= 0.65;
+            base.sunIntensity *= 0.5;
+            base.roadColor = '#475569'; // 비에 젖은 어두운 보도블록
+        } else if (weather === 'snow') {
+            base.fogColor = timeOfDay === 'night' ? '#1e293b' : '#e2e8f0';
+            base.groundColor = '#f8fafc'; // 흰 눈이 덮인 잔디밭
+            base.roadColor = '#cbd5e1';
+        } else if (weather === 'sakura') {
+            base.fogColor = timeOfDay === 'sunset' ? '#f472b6' : (timeOfDay === 'night' ? '#4c1d95' : '#fbcfe8');
+        }
+
+        return base;
+    }, [timeOfDay, weather]);
 
     // 나무 위치 배열
     const treePositions = useMemo(() => [
