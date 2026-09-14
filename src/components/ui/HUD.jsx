@@ -10,6 +10,7 @@ import {
     CloudRain,
     Snowflake,
     Sparkles,
+    Shirt,
     Compass,
     Trophy,
     FileText,
@@ -134,6 +135,12 @@ export const HUD = () => {
                         title={soundEnabled ? '사운드 끄기' : '사운드 켜기 (Lo-Fi BGM & SFX)'}
                     >
                         {soundEnabled ? <Volume2 size={17} color="#059669" /> : <VolumeX size={17} color="#64748b" />}
+                    </button>
+
+                    {/* 3D 아바타 드레스룸 모달 */}
+                    <button className="glass-btn" onClick={() => openModal('dressroom')}>
+                        <Shirt size={15} color="#f472b6" />
+                        <span>드레스룸</span>
                     </button>
 
                     {/* 타운 가이드 모달 */}

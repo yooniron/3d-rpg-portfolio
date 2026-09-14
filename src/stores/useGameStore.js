@@ -22,6 +22,18 @@ export const useGameStore = create((set, get) => ({
         set({ weather });
     },
 
+    // 3D 플레이어 아바타 드레스룸 의상 & 헤드기어 커스텀
+    outfit: 'developer', // 'developer' | 'hoodie' | 'ninja' | 'cyber'
+    hat: 'none',        // 'none' | 'cap' | 'headphones' | 'crown'
+    setOutfit: (outfit) => {
+        soundEngine.playQuestComplete();
+        set({ outfit });
+    },
+    setHat: (hat) => {
+        soundEngine.playQuestComplete();
+        set({ hat });
+    },
+
     // 활성 모달 다이얼로그 및 시네마틱 카메라 시퀀서
     activeModal: null, // null | 'guide' | 'school' | 'company-a' | 'company-b' | 'arcade' | 'mailbox' | 'quest' | 'badges'
     modalData: null,

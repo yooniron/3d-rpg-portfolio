@@ -267,6 +267,25 @@ export const Player = () => {
         }
     });
 
+    // Zustand Store Customizer State
+    const outfit = useGameStore((state) => state.outfit);
+    const hat = useGameStore((state) => state.hat);
+
+    // 의상별 3D 팔/몸통/바지/신발 렌더링 스펙
+    const outfitSpec = React.useMemo(() => {
+        switch (outfit) {
+            case 'hoodie':
+                return { torsoColor: '#10b981', pantsColor: '#1e3a8a', shoeColor: '#ffffff', visorColor: '#34d399' };
+            case 'ninja':
+                return { torsoColor: '#090d16', pantsColor: '#0f172a', shoeColor: '#000000', visorColor: '#f43f5e', scarfColor: '#e11d48' };
+            case 'cyber':
+                return { torsoColor: '#f8fafc', pantsColor: '#0284c7', shoeColor: '#ffffff', visorColor: '#22d3ee', shoulderColor: '#d946ef' };
+            case 'developer':
+            default:
+                return { torsoColor: '#1e293b', pantsColor: '#334155', shoeColor: '#0f172a', visorColor: '#06b6d4' };
+        }
+    }, [outfit]);
+
     return (
         <group ref={groupRef} position={[0, 0, 4]}>
             {/* Ground Shadow Decal (Soft) */}
@@ -278,14 +297,40 @@ export const Player = () => {
             {/* Pelvis / Hips */}
             <mesh position={[0, 0.9, 0]} castShadow>
                 <boxGeometry args={[0.6, 0.3, 0.4]} />
-                <meshStandardMaterial color="#334155" />
+                <meshStandardMaterial color={outfitSpec.pantsColor} />
             </mesh>
 
-            {/* Torso / Bright Sky-Blue Hoodie */}
+            {/* Torso / Upper Body */}
             <mesh position={[0, 1.4, 0]} castShadow>
                 <boxGeometry args={[0.7, 0.75, 0.45]} />
-                <meshStandardMaterial color="#0284c7" roughness={0.3} />
+                <meshStandardMaterial color={outfitSpec.torsoColor} roughness={0.3} />
             </mesh>
+
+            {/* Developer Suit Tie / Cyber Shoulder Pads / Ninja Scarf Accent */}
+            {outfit === 'developer' && (
+                <mesh position={[0, 1.45, 0.23]}>
+                    <boxGeometry args={[0.12, 0.4, 0.02]} />
+                    <meshBasicMaterial color="#06b6d4" />
+                </mesh>
+            )}
+            {outfit === 'ninja' && (
+                <mesh position={[0, 1.82, 0.15]}>
+                    <boxGeometry args={[0.54, 0.12, 0.3]} />
+                    <meshBasicMaterial color={outfitSpec.scarfColor} />
+                </mesh>
+            )}
+            {outfit === 'cyber' && (
+                <group>
+                    <mesh position={[-0.4, 1.75, 0]}>
+                        <boxGeometry args={[0.2, 0.15, 0.4]} />
+                        <meshBasicMaterial color={outfitSpec.shoulderColor} />
+                    </mesh>
+                    <mesh position={[0.4, 1.75, 0]}>
+                        <boxGeometry args={[0.2, 0.15, 0.4]} />
+                        <meshBasicMaterial color={outfitSpec.shoulderColor} />
+                    </mesh>
+                </group>
+            )}
 
             {/* Tech Backpack (Ivory & Gold) */}
             <mesh position={[0, 1.4, -0.3]} castShadow>
@@ -303,23 +348,68 @@ export const Player = () => {
                 <meshStandardMaterial color="#fed7aa" roughness={0.5} />
             </mesh>
 
-            {/* Glowing Golden Visor */}
+            {/* Glowing Visor */}
             <mesh position={[0, 2.08, 0.2]}>
                 <boxGeometry args={[0.52, 0.16, 0.15]} />
-                <meshStandardMaterial color="#f59e0b" emissive="#fbbf24" emissiveIntensity={0.8} />
+                <meshStandardMaterial color={outfitSpec.visorColor} emissive={outfitSpec.visorColor} emissiveIntensity={0.8} />
             </mesh>
 
-            {/* Stylish Brown/Chestnut Hair */}
+            {/* Hair */}
             <mesh position={[0, 2.32, -0.02]} castShadow>
                 <boxGeometry args={[0.54, 0.15, 0.54]} />
                 <meshStandardMaterial color="#78350f" />
             </mesh>
 
+            {/* 🧢 헤드기어 (Hat Customization) */}
+            {hat === 'cap' && (
+                <group position={[0, 2.35, 0]}>
+                    {/* 모자 캡 메쉬 */}
+                    <mesh position={[0, 0.08, 0]} castShadow>
+                        <cylinderGeometry args={[0.3, 0.32, 0.18, 16]} />
+                        <meshStandardMaterial color="#3b82f6" />
+                    </mesh>
+                    {/* 모자 챙 */}
+                    <mesh position={[0, 0.02, 0.22]} rotation={[0.2, 0, 0]}>
+                        <boxGeometry args={[0.42, 0.04, 0.25]} />
+                        <meshStandardMaterial color="#1d4ed8" />
+                    </mesh>
+                </group>
+            )}
+
+            {hat === 'headphones' && (
+                <group position={[0, 2.08, 0]}>
+                    {/* 헤드폰 헤드밴드 */}
+                    <mesh position={[0, 0.28, 0]}>
+                        <torusGeometry args={[0.32, 0.04, 8, 24, Math.PI]} />
+                        <meshStandardMaterial color="#0f172a" />
+                    </mesh>
+                    {/* 좌우 이어컵 & RGB 글로우 */}
+                    <mesh position={[-0.3, 0, 0]}>
+                        <boxGeometry args={[0.1, 0.22, 0.18]} />
+                        <meshBasicMaterial color="#06b6d4" />
+                    </mesh>
+                    <mesh position={[0.3, 0, 0]}>
+                        <boxGeometry args={[0.1, 0.22, 0.18]} />
+                        <meshBasicMaterial color="#ec4899" />
+                    </mesh>
+                </group>
+            )}
+
+            {hat === 'crown' && (
+                <group position={[0, 2.48, 0]}>
+                    {/* 황금 왕관 */}
+                    <mesh castShadow>
+                        <cylinderGeometry args={[0.25, 0.2, 0.2, 8]} />
+                        <meshStandardMaterial color="#eab308" metalness={0.8} roughness={0.2} emissive="#f59e0b" emissiveIntensity={0.5} />
+                    </mesh>
+                </group>
+            )}
+
             {/* Left Arm */}
             <group ref={leftArmRef} position={[-0.45, 1.7, 0]}>
                 <mesh position={[0, -0.3, 0]} castShadow>
                     <boxGeometry args={[0.2, 0.6, 0.2]} />
-                    <meshStandardMaterial color="#0284c7" />
+                    <meshStandardMaterial color={outfitSpec.torsoColor} />
                 </mesh>
                 <mesh position={[0, -0.65, 0]}>
                     <sphereGeometry args={[0.1, 8, 8]} />
@@ -331,7 +421,7 @@ export const Player = () => {
             <group ref={rightArmRef} position={[0.45, 1.7, 0]}>
                 <mesh position={[0, -0.3, 0]} castShadow>
                     <boxGeometry args={[0.2, 0.6, 0.2]} />
-                    <meshStandardMaterial color="#0284c7" />
+                    <meshStandardMaterial color={outfitSpec.torsoColor} />
                 </mesh>
                 <mesh position={[0, -0.65, 0]}>
                     <sphereGeometry args={[0.1, 8, 8]} />
@@ -343,11 +433,11 @@ export const Player = () => {
             <group ref={leftLegRef} position={[-0.2, 0.75, 0]}>
                 <mesh position={[0, -0.35, 0]} castShadow>
                     <boxGeometry args={[0.22, 0.7, 0.25]} />
-                    <meshStandardMaterial color="#334155" />
+                    <meshStandardMaterial color={outfitSpec.pantsColor} />
                 </mesh>
                 <mesh position={[0, -0.72, 0.05]} castShadow>
                     <boxGeometry args={[0.24, 0.15, 0.35]} />
-                    <meshStandardMaterial color="#ffffff" />
+                    <meshStandardMaterial color={outfitSpec.shoeColor} />
                 </mesh>
             </group>
 
@@ -355,11 +445,11 @@ export const Player = () => {
             <group ref={rightLegRef} position={[0.2, 0.75, 0]}>
                 <mesh position={[0, -0.35, 0]} castShadow>
                     <boxGeometry args={[0.22, 0.7, 0.25]} />
-                    <meshStandardMaterial color="#334155" />
+                    <meshStandardMaterial color={outfitSpec.pantsColor} />
                 </mesh>
                 <mesh position={[0, -0.72, 0.05]} castShadow>
                     <boxGeometry args={[0.24, 0.15, 0.35]} />
-                    <meshStandardMaterial color="#ffffff" />
+                    <meshStandardMaterial color={outfitSpec.shoeColor} />
                 </mesh>
             </group>
         </group>

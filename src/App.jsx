@@ -9,6 +9,7 @@ import { ProjectModal } from './components/ui/modals/ProjectModal';
 import { ContactModal } from './components/ui/modals/ContactModal';
 import { QuestModal } from './components/ui/modals/QuestModal';
 import { NPCModal } from './components/ui/modals/NPCModal';
+import { DressroomModal } from './components/ui/modals/DressroomModal';
 import { ResumeView2D } from './components/ui/ResumeView2D';
 
 export const App = () => {
@@ -44,6 +45,7 @@ export const App = () => {
                     {activeModal === 'arcade' && <ProjectModal onClose={closeModal} />}
                     {activeModal === 'mailbox' && <ContactModal onClose={closeModal} />}
                     {activeModal === 'quest' && <QuestModal onClose={closeModal} onTeleport={teleportTo} />}
+                    {activeModal === 'dressroom' && <DressroomModal onClose={closeModal} />}
                     <NPCModal />
                 </>
             ) : (
