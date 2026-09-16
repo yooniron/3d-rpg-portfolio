@@ -137,70 +137,99 @@ export const TownEnvironment = () => {
                 <meshStandardMaterial color={envConfig.roadColor} roughness={0.4} />
             </mesh>
 
-            {/* 도로 경계석 라인 */}
-            {/* 남북 도로 좌측 경계석 */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-2.7, 0.025, 0]}>
-                <planeGeometry args={[0.25, 48]} />
-                <meshBasicMaterial color="#cbd5e1" />
+            {/* 도로 3D 보도블록 경계석 Curb Blocks */}
+            <mesh position={[-2.7, 0.05, 0]}>
+                <boxGeometry args={[0.3, 0.08, 48]} />
+                <meshStandardMaterial color="#94a3b8" roughness={0.3} />
             </mesh>
-            {/* 남북 도로 우측 경계석 */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2.7, 0.025, 0]}>
-                <planeGeometry args={[0.25, 48]} />
-                <meshBasicMaterial color="#cbd5e1" />
+            <mesh position={[2.7, 0.05, 0]}>
+                <boxGeometry args={[0.3, 0.08, 48]} />
+                <meshStandardMaterial color="#94a3b8" roughness={0.3} />
             </mesh>
 
-            {/* 화려한 화단 오컬트 */}
+            {/* 정교한 화단 오컬트 & 우든 울타리 펜스 */}
             {flowerPatches.map((pos, idx) => (
                 <group key={`flower-${idx}`} position={pos}>
-                    {[-0.6, 0, 0.6].map((fx, fi) =>
-                        [-0.6, 0, 0.6].map((fz, fz_i) => (
-                            <mesh key={`${fi}-${fz_i}`} position={[fx, 0.15, fz]}>
-                                <sphereGeometry args={[0.18, 8, 8]} />
-                                <meshStandardMaterial
-                                    color={(fi + fz_i) % 3 === 0 ? '#f43f5e' : (fi + fz_i) % 3 === 1 ? '#fbbf24' : '#c084fc'}
-                                />
-                            </mesh>
+                    {/* 화단 원목 울타리 테두리 */}
+                    <mesh position={[0, 0.1, 0]}>
+                        <boxGeometry args={[2.2, 0.2, 2.2]} />
+                        <meshStandardMaterial color="#78350f" roughness={0.7} />
+                    </mesh>
+                    <mesh position={[0, 0.12, 0]}>
+                        <boxGeometry args={[1.9, 0.22, 1.9]} />
+                        <meshStandardMaterial color="#451a03" roughness={0.8} />
+                    </mesh>
+
+                    {/* 삼차원 꽃 송이 */}
+                    {[-0.5, 0, 0.5].map((fx, fi) =>
+                        [-0.5, 0, 0.5].map((fz, fz_i) => (
+                            <group key={`${fi}-${fz_i}`} position={[fx, 0.22, fz]}>
+                                <mesh castShadow>
+                                    <sphereGeometry args={[0.18, 8, 8]} />
+                                    <meshStandardMaterial
+                                        color={(fi + fz_i) % 3 === 0 ? '#f43f5e' : (fi + fz_i) % 3 === 1 ? '#fbbf24' : '#c084fc'}
+                                        roughness={0.3}
+                                    />
+                                </mesh>
+                                {/* 줄기 및 잎사귀 */}
+                                <mesh position={[0, -0.1, 0]}>
+                                    <cylinderGeometry args={[0.02, 0.03, 0.2, 6]} />
+                                    <meshStandardMaterial color="#10b981" />
+                                </mesh>
+                            </group>
                         ))
                     )}
                 </group>
             ))}
 
-            {/* 로우폴리 나무 식생 오브젝트 */}
+            {/* 디테일 로우폴리 나무 식생 오브젝트 */}
             {treePositions.map((pos, idx) => (
                 <group key={`tree-${idx}`} position={pos}>
                     {/* 기둥 */}
                     <mesh position={[0, 1.2, 0]} castShadow>
-                        <cylinderGeometry args={[0.25, 0.35, 2.4, 6]} />
-                        <meshStandardMaterial color="#fef3c7" roughness={0.8} />
+                        <cylinderGeometry args={[0.25, 0.38, 2.4, 8]} />
+                        <meshStandardMaterial color="#78350f" roughness={0.8} />
                     </mesh>
-                    {/* 나뭇잎 */}
+                    {/* 나뭇잎 3단 옥타곤 코일 */}
                     <mesh position={[0, 3.2, 0]} castShadow>
-                        <coneGeometry args={[1.8, 2.6, 6]} />
-                        <meshStandardMaterial color="#10b981" roughness={0.5} />
+                        <coneGeometry args={[1.9, 2.6, 8]} />
+                        <meshStandardMaterial color="#059669" roughness={0.4} />
                     </mesh>
                     <mesh position={[0, 4.6, 0]} castShadow>
-                        <coneGeometry args={[1.3, 2.2, 6]} />
-                        <meshStandardMaterial color="#34d399" roughness={0.5} />
+                        <coneGeometry args={[1.4, 2.2, 8]} />
+                        <meshStandardMaterial color="#10b981" roughness={0.4} />
                     </mesh>
                     <mesh position={[0, 5.8, 0]} castShadow>
-                        <coneGeometry args={[0.8, 1.8, 6]} />
-                        <meshStandardMaterial color="#6ee7b7" roughness={0.5} />
+                        <coneGeometry args={[0.9, 1.8, 8]} />
+                        <meshStandardMaterial color="#34d399" roughness={0.4} />
                     </mesh>
                 </group>
             ))}
 
-            {/* 모던 라이트 가로등 */}
+            {/* 모던 라이트 가로등 & 갓 장식 */}
             {lampPositions.map((pos, idx) => (
                 <group key={`lamp-${idx}`} position={pos}>
-                    <mesh position={[0, 1.8, 0]} castShadow>
-                        <cylinderGeometry args={[0.08, 0.12, 3.6, 8]} />
-                        <meshStandardMaterial color="#e2e8f0" metalness={0.6} roughness={0.2} />
+                    {/* 가로등 베이스 */}
+                    <mesh position={[0, 0.2, 0]}>
+                        <cylinderGeometry args={[0.25, 0.35, 0.4, 8]} />
+                        <meshStandardMaterial color="#0f172a" metalness={0.8} />
                     </mesh>
-                    <mesh position={[0, 3.7, 0]}>
-                        <sphereGeometry args={[0.3, 12, 12]} />
+                    {/* 기둥 */}
+                    <mesh position={[0, 1.8, 0]} castShadow>
+                        <cylinderGeometry args={[0.08, 0.14, 3.6, 8]} />
+                        <meshStandardMaterial color="#1e293b" metalness={0.7} roughness={0.2} />
+                    </mesh>
+                    {/* 가로등 갓 */}
+                    <mesh position={[0, 3.8, 0]}>
+                        <coneGeometry args={[0.45, 0.2, 8]} />
+                        <meshStandardMaterial color="#0f172a" metalness={0.8} />
+                    </mesh>
+                    {/* 발광 구체 */}
+                    <mesh position={[0, 3.65, 0]}>
+                        <sphereGeometry args={[0.26, 12, 12]} />
                         <meshBasicMaterial color="#38bdf8" />
                     </mesh>
-                    <pointLight position={[0, 3.7, 0]} color="#38bdf8" intensity={0.6} distance={6} />
+                    <pointLight position={[0, 3.65, 0]} color="#38bdf8" intensity={0.7} distance={7} />
                 </group>
             ))}
         </>
