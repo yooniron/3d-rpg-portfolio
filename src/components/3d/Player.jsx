@@ -6,6 +6,7 @@ import { careerData } from '../../data/careerData';
 
 export const Player = () => {
     const groupRef = useRef();
+    const bodyGroupRef = useRef();
     const leftLegRef = useRef();
     const rightLegRef = useRef();
     const leftArmRef = useRef();
@@ -35,7 +36,11 @@ export const Player = () => {
         pos: new THREE.Vector3(0, 0, 4),
         velocity: new THREE.Vector3(),
         rotation: 0,
-        walkTime: 0
+        angularVel: 0,
+        tiltPitch: 0,
+        tiltRoll: 0,
+        walkTime: 0,
+        squashY: 1.0
     });
 
     // Keyboard Event Listeners
@@ -156,44 +161,88 @@ export const Player = () => {
 
         const isInputActive = moveX !== 0 || moveZ !== 0;
         const isRunning = keys.current.shift;
-        const speed = (isRunning ? 11.5 : 6.8) * delta;
+        const targetMaxSpeed = isRunning ? 11.5 : 6.8;
 
+        // Target Velocity calculation
+        let inputDir = new THREE.Vector3();
         if (isInputActive) {
-            const inputDir = new THREE.Vector3(moveX, 0, moveZ).normalize();
-            playerState.current.pos.x += inputDir.x * speed;
-            playerState.current.pos.z += inputDir.z * speed;
+            inputDir.set(moveX, 0, moveZ).normalize();
+        }
+        const targetVelocity = inputDir.clone().multiplyScalar(targetMaxSpeed);
 
-            playerState.current.pos.x = Math.max(-42, Math.min(42, playerState.current.pos.x));
-            playerState.current.pos.z = Math.max(-42, Math.min(42, playerState.current.pos.z));
+        // Smooth Physics Inertia (Acceleration & Friction)
+        const accelDamp = 1 - Math.exp((isInputActive ? -14.0 : -10.0) * delta);
+        playerState.current.velocity.lerp(targetVelocity, accelDamp);
 
+        // Apply velocity to position
+        playerState.current.pos.x += playerState.current.velocity.x * delta;
+        playerState.current.pos.z += playerState.current.velocity.z * delta;
+
+        // Boundary clamping
+        playerState.current.pos.x = Math.max(-42, Math.min(42, playerState.current.pos.x));
+        playerState.current.pos.z = Math.max(-42, Math.min(42, playerState.current.pos.z));
+
+        const currentSpeed = playerState.current.velocity.length();
+        const isMoving = currentSpeed > 0.15;
+        const speedRatio = Math.min(1.0, currentSpeed / 6.8);
+
+        // Rotation & Angular Velocity (Smooth Slerp)
+        if (isInputActive) {
             const targetAngle = Math.atan2(inputDir.x, inputDir.z);
             let angleDiff = targetAngle - playerState.current.rotation;
             while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
             while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
-            playerState.current.rotation += angleDiff * Math.min(1, delta * 15);
 
-            playerState.current.walkTime += delta * (isRunning ? 18 : 11);
-            const legSwing = Math.sin(playerState.current.walkTime) * 0.6;
-            const armSwing = Math.cos(playerState.current.walkTime) * 0.6;
-
-            if (leftLegRef.current) leftLegRef.current.rotation.x = legSwing;
-            if (rightLegRef.current) rightLegRef.current.rotation.x = -legSwing;
-            if (leftArmRef.current) leftArmRef.current.rotation.x = -armSwing;
-            if (rightArmRef.current) rightArmRef.current.rotation.x = armSwing;
-
-            groupRef.current.position.y = Math.abs(Math.sin(playerState.current.walkTime * 2)) * 0.12;
-
-            setIsMoving(true);
-            setIsRunning(isRunning);
+            playerState.current.angularVel = THREE.MathUtils.damp(playerState.current.angularVel, angleDiff, 16, delta);
+            playerState.current.rotation += angleDiff * (1 - Math.exp(-15 * delta));
         } else {
-            if (leftLegRef.current) leftLegRef.current.rotation.x *= 0.8;
-            if (rightLegRef.current) rightLegRef.current.rotation.x *= 0.8;
-            if (leftArmRef.current) leftArmRef.current.rotation.x *= 0.8;
-            if (rightArmRef.current) rightArmRef.current.rotation.x *= 0.8;
-            groupRef.current.position.y = 0;
+            playerState.current.angularVel = THREE.MathUtils.damp(playerState.current.angularVel, 0, 10, delta);
+        }
 
-            setIsMoving(false);
-            setIsRunning(false);
+        // Torso Pitch (Leaning Forward) & Roll (Banking into Turns)
+        const targetPitch = isMoving ? Math.min(0.2, currentSpeed * 0.016) : 0;
+        const targetRoll = -playerState.current.angularVel * 0.28;
+
+        playerState.current.tiltPitch = THREE.MathUtils.damp(playerState.current.tiltPitch, targetPitch, 10, delta);
+        playerState.current.tiltRoll = THREE.MathUtils.damp(playerState.current.tiltRoll, targetRoll, 10, delta);
+
+        // Gait swing cycle & limb animations
+        playerState.current.walkTime += delta * (isMoving ? currentSpeed * (isRunning ? 1.6 : 2.1) : 0);
+
+        const legSwing = Math.sin(playerState.current.walkTime) * 0.65 * speedRatio;
+        const armSwing = Math.cos(playerState.current.walkTime) * 0.65 * speedRatio;
+        const armFlirtZ = Math.abs(Math.sin(playerState.current.walkTime)) * 0.12 * speedRatio;
+
+        if (leftLegRef.current) {
+            leftLegRef.current.rotation.x = isMoving ? legSwing : THREE.MathUtils.damp(leftLegRef.current.rotation.x, 0, 12, delta);
+        }
+        if (rightLegRef.current) {
+            rightLegRef.current.rotation.x = isMoving ? -legSwing : THREE.MathUtils.damp(rightLegRef.current.rotation.x, 0, 12, delta);
+        }
+        if (leftArmRef.current) {
+            leftArmRef.current.rotation.x = isMoving ? -armSwing : THREE.MathUtils.damp(leftArmRef.current.rotation.x, 0, 12, delta);
+            leftArmRef.current.rotation.z = isMoving ? -armFlirtZ : THREE.MathUtils.damp(leftArmRef.current.rotation.z, 0, 10, delta);
+        }
+        if (rightArmRef.current) {
+            rightArmRef.current.rotation.x = isMoving ? armSwing : THREE.MathUtils.damp(rightArmRef.current.rotation.x, 0, 12, delta);
+            rightArmRef.current.rotation.z = isMoving ? armFlirtZ : THREE.MathUtils.damp(rightArmRef.current.rotation.z, 0, 10, delta);
+        }
+
+        // Idle Breathing & Footstep Bobbing & Elastic Squash
+        const walkBob = isMoving ? Math.abs(Math.sin(playerState.current.walkTime * 2)) * 0.1 * speedRatio : 0;
+        const breathCycle = Math.sin(state.clock.elapsedTime * 2.6);
+        const idleBreathY = !isMoving ? breathCycle * 0.025 : 0;
+
+        groupRef.current.position.y = walkBob + idleBreathY;
+
+        // Apply Pitch and Roll to Body Container Mesh
+        if (bodyGroupRef.current) {
+            bodyGroupRef.current.rotation.x = playerState.current.tiltPitch;
+            bodyGroupRef.current.rotation.z = playerState.current.tiltRoll;
+
+            const targetSquashY = !isMoving ? 1.0 + breathCycle * 0.015 : 1.0;
+            playerState.current.squashY = THREE.MathUtils.damp(playerState.current.squashY, targetSquashY, 12, delta);
+            bodyGroupRef.current.scale.set(1 / Math.sqrt(playerState.current.squashY), playerState.current.squashY, 1 / Math.sqrt(playerState.current.squashY));
         }
 
         groupRef.current.position.x = playerState.current.pos.x;
@@ -202,6 +251,8 @@ export const Player = () => {
 
         setPlayerPos([playerState.current.pos.x, 0, playerState.current.pos.z]);
         setPlayerRotation(playerState.current.rotation);
+        setIsMoving(isMoving);
+        setIsRunning(isMoving && isRunning);
 
         let closestBuilding = null;
         let minDistance = 5.2;
@@ -294,163 +345,166 @@ export const Player = () => {
                 <meshBasicMaterial color="#000000" transparent opacity={0.2} />
             </mesh>
 
-            {/* Pelvis / Hips */}
-            <mesh position={[0, 0.9, 0]} castShadow>
-                <boxGeometry args={[0.6, 0.3, 0.4]} />
-                <meshStandardMaterial color={outfitSpec.pantsColor} />
-            </mesh>
-
-            {/* Torso / Upper Body */}
-            <mesh position={[0, 1.4, 0]} castShadow>
-                <boxGeometry args={[0.7, 0.75, 0.45]} />
-                <meshStandardMaterial color={outfitSpec.torsoColor} roughness={0.3} />
-            </mesh>
-
-            {/* Developer Suit Tie / Cyber Shoulder Pads / Ninja Scarf Accent */}
-            {outfit === 'developer' && (
-                <mesh position={[0, 1.45, 0.23]}>
-                    <boxGeometry args={[0.12, 0.4, 0.02]} />
-                    <meshBasicMaterial color="#06b6d4" />
+            {/* Animated Character Body Container (Pitch Tilt & Roll Banking) */}
+            <group ref={bodyGroupRef}>
+                {/* Pelvis / Hips */}
+                <mesh position={[0, 0.9, 0]} castShadow>
+                    <boxGeometry args={[0.6, 0.3, 0.4]} />
+                    <meshStandardMaterial color={outfitSpec.pantsColor} />
                 </mesh>
-            )}
-            {outfit === 'ninja' && (
-                <mesh position={[0, 1.82, 0.15]}>
-                    <boxGeometry args={[0.54, 0.12, 0.3]} />
-                    <meshBasicMaterial color={outfitSpec.scarfColor} />
+
+                {/* Torso / Upper Body */}
+                <mesh position={[0, 1.4, 0]} castShadow>
+                    <boxGeometry args={[0.7, 0.75, 0.45]} />
+                    <meshStandardMaterial color={outfitSpec.torsoColor} roughness={0.3} />
                 </mesh>
-            )}
-            {outfit === 'cyber' && (
-                <group>
-                    <mesh position={[-0.4, 1.75, 0]}>
-                        <boxGeometry args={[0.2, 0.15, 0.4]} />
-                        <meshBasicMaterial color={outfitSpec.shoulderColor} />
-                    </mesh>
-                    <mesh position={[0.4, 1.75, 0]}>
-                        <boxGeometry args={[0.2, 0.15, 0.4]} />
-                        <meshBasicMaterial color={outfitSpec.shoulderColor} />
-                    </mesh>
-                </group>
-            )}
 
-            {/* Tech Backpack (Ivory & Gold) */}
-            <mesh position={[0, 1.4, -0.3]} castShadow>
-                <boxGeometry args={[0.5, 0.6, 0.25]} />
-                <meshStandardMaterial color="#f8fafc" />
-            </mesh>
-            <mesh position={[0, 1.4, -0.43]}>
-                <sphereGeometry args={[0.08, 8, 8]} />
-                <meshBasicMaterial color="#f59e0b" />
-            </mesh>
-
-            {/* Head */}
-            <mesh position={[0, 2.05, 0]} castShadow>
-                <boxGeometry args={[0.5, 0.5, 0.5]} />
-                <meshStandardMaterial color="#fed7aa" roughness={0.5} />
-            </mesh>
-
-            {/* Glowing Visor */}
-            <mesh position={[0, 2.08, 0.2]}>
-                <boxGeometry args={[0.52, 0.16, 0.15]} />
-                <meshStandardMaterial color={outfitSpec.visorColor} emissive={outfitSpec.visorColor} emissiveIntensity={0.8} />
-            </mesh>
-
-            {/* Hair */}
-            <mesh position={[0, 2.32, -0.02]} castShadow>
-                <boxGeometry args={[0.54, 0.15, 0.54]} />
-                <meshStandardMaterial color="#78350f" />
-            </mesh>
-
-            {/* 🧢 헤드기어 (Hat Customization) */}
-            {hat === 'cap' && (
-                <group position={[0, 2.35, 0]}>
-                    {/* 모자 캡 메쉬 */}
-                    <mesh position={[0, 0.08, 0]} castShadow>
-                        <cylinderGeometry args={[0.3, 0.32, 0.18, 16]} />
-                        <meshStandardMaterial color="#3b82f6" />
-                    </mesh>
-                    {/* 모자 챙 */}
-                    <mesh position={[0, 0.02, 0.22]} rotation={[0.2, 0, 0]}>
-                        <boxGeometry args={[0.42, 0.04, 0.25]} />
-                        <meshStandardMaterial color="#1d4ed8" />
-                    </mesh>
-                </group>
-            )}
-
-            {hat === 'headphones' && (
-                <group position={[0, 2.08, 0]}>
-                    {/* 헤드폰 헤드밴드 */}
-                    <mesh position={[0, 0.28, 0]}>
-                        <torusGeometry args={[0.32, 0.04, 8, 24, Math.PI]} />
-                        <meshStandardMaterial color="#0f172a" />
-                    </mesh>
-                    {/* 좌우 이어컵 & RGB 글로우 */}
-                    <mesh position={[-0.3, 0, 0]}>
-                        <boxGeometry args={[0.1, 0.22, 0.18]} />
+                {/* Developer Suit Tie / Cyber Shoulder Pads / Ninja Scarf Accent */}
+                {outfit === 'developer' && (
+                    <mesh position={[0, 1.45, 0.23]}>
+                        <boxGeometry args={[0.12, 0.4, 0.02]} />
                         <meshBasicMaterial color="#06b6d4" />
                     </mesh>
-                    <mesh position={[0.3, 0, 0]}>
-                        <boxGeometry args={[0.1, 0.22, 0.18]} />
-                        <meshBasicMaterial color="#ec4899" />
+                )}
+                {outfit === 'ninja' && (
+                    <mesh position={[0, 1.82, 0.15]}>
+                        <boxGeometry args={[0.54, 0.12, 0.3]} />
+                        <meshBasicMaterial color={outfitSpec.scarfColor} />
+                    </mesh>
+                )}
+                {outfit === 'cyber' && (
+                    <group>
+                        <mesh position={[-0.4, 1.75, 0]}>
+                            <boxGeometry args={[0.2, 0.15, 0.4]} />
+                            <meshBasicMaterial color={outfitSpec.shoulderColor} />
+                        </mesh>
+                        <mesh position={[0.4, 1.75, 0]}>
+                            <boxGeometry args={[0.2, 0.15, 0.4]} />
+                            <meshBasicMaterial color={outfitSpec.shoulderColor} />
+                        </mesh>
+                    </group>
+                )}
+
+                {/* Tech Backpack (Ivory & Gold) */}
+                <mesh position={[0, 1.4, -0.3]} castShadow>
+                    <boxGeometry args={[0.5, 0.6, 0.25]} />
+                    <meshStandardMaterial color="#f8fafc" />
+                </mesh>
+                <mesh position={[0, 1.4, -0.43]}>
+                    <sphereGeometry args={[0.08, 8, 8]} />
+                    <meshBasicMaterial color="#f59e0b" />
+                </mesh>
+
+                {/* Head */}
+                <mesh position={[0, 2.05, 0]} castShadow>
+                    <boxGeometry args={[0.5, 0.5, 0.5]} />
+                    <meshStandardMaterial color="#fed7aa" roughness={0.5} />
+                </mesh>
+
+                {/* Glowing Visor */}
+                <mesh position={[0, 2.08, 0.2]}>
+                    <boxGeometry args={[0.52, 0.16, 0.15]} />
+                    <meshStandardMaterial color={outfitSpec.visorColor} emissive={outfitSpec.visorColor} emissiveIntensity={0.8} />
+                </mesh>
+
+                {/* Hair */}
+                <mesh position={[0, 2.32, -0.02]} castShadow>
+                    <boxGeometry args={[0.54, 0.15, 0.54]} />
+                    <meshStandardMaterial color="#78350f" />
+                </mesh>
+
+                {/* 🧢 헤드기어 (Hat Customization) */}
+                {hat === 'cap' && (
+                    <group position={[0, 2.35, 0]}>
+                        {/* 모자 캡 메쉬 */}
+                        <mesh position={[0, 0.08, 0]} castShadow>
+                            <cylinderGeometry args={[0.3, 0.32, 0.18, 16]} />
+                            <meshStandardMaterial color="#3b82f6" />
+                        </mesh>
+                        {/* 모자 챙 */}
+                        <mesh position={[0, 0.02, 0.22]} rotation={[0.2, 0, 0]}>
+                            <boxGeometry args={[0.42, 0.04, 0.25]} />
+                            <meshStandardMaterial color="#1d4ed8" />
+                        </mesh>
+                    </group>
+                )}
+
+                {hat === 'headphones' && (
+                    <group position={[0, 2.08, 0]}>
+                        {/* 헤드폰 헤드밴드 */}
+                        <mesh position={[0, 0.28, 0]}>
+                            <torusGeometry args={[0.32, 0.04, 8, 24, Math.PI]} />
+                            <meshStandardMaterial color="#0f172a" />
+                        </mesh>
+                        {/* 좌우 이어컵 & RGB 글로우 */}
+                        <mesh position={[-0.3, 0, 0]}>
+                            <boxGeometry args={[0.1, 0.22, 0.18]} />
+                            <meshBasicMaterial color="#06b6d4" />
+                        </mesh>
+                        <mesh position={[0.3, 0, 0]}>
+                            <boxGeometry args={[0.1, 0.22, 0.18]} />
+                            <meshBasicMaterial color="#ec4899" />
+                        </mesh>
+                    </group>
+                )}
+
+                {hat === 'crown' && (
+                    <group position={[0, 2.48, 0]}>
+                        {/* 황금 왕관 */}
+                        <mesh castShadow>
+                            <cylinderGeometry args={[0.25, 0.2, 0.2, 8]} />
+                            <meshStandardMaterial color="#eab308" metalness={0.8} roughness={0.2} emissive="#f59e0b" emissiveIntensity={0.5} />
+                        </mesh>
+                    </group>
+                )}
+
+                {/* Left Arm */}
+                <group ref={leftArmRef} position={[-0.45, 1.7, 0]}>
+                    <mesh position={[0, -0.3, 0]} castShadow>
+                        <boxGeometry args={[0.2, 0.6, 0.2]} />
+                        <meshStandardMaterial color={outfitSpec.torsoColor} />
+                    </mesh>
+                    <mesh position={[0, -0.65, 0]}>
+                        <sphereGeometry args={[0.1, 8, 8]} />
+                        <meshStandardMaterial color="#fed7aa" />
                     </mesh>
                 </group>
-            )}
 
-            {hat === 'crown' && (
-                <group position={[0, 2.48, 0]}>
-                    {/* 황금 왕관 */}
-                    <mesh castShadow>
-                        <cylinderGeometry args={[0.25, 0.2, 0.2, 8]} />
-                        <meshStandardMaterial color="#eab308" metalness={0.8} roughness={0.2} emissive="#f59e0b" emissiveIntensity={0.5} />
+                {/* Right Arm */}
+                <group ref={rightArmRef} position={[0.45, 1.7, 0]}>
+                    <mesh position={[0, -0.3, 0]} castShadow>
+                        <boxGeometry args={[0.2, 0.6, 0.2]} />
+                        <meshStandardMaterial color={outfitSpec.torsoColor} />
+                    </mesh>
+                    <mesh position={[0, -0.65, 0]}>
+                        <sphereGeometry args={[0.1, 8, 8]} />
+                        <meshStandardMaterial color="#fed7aa" />
                     </mesh>
                 </group>
-            )}
 
-            {/* Left Arm */}
-            <group ref={leftArmRef} position={[-0.45, 1.7, 0]}>
-                <mesh position={[0, -0.3, 0]} castShadow>
-                    <boxGeometry args={[0.2, 0.6, 0.2]} />
-                    <meshStandardMaterial color={outfitSpec.torsoColor} />
-                </mesh>
-                <mesh position={[0, -0.65, 0]}>
-                    <sphereGeometry args={[0.1, 8, 8]} />
-                    <meshStandardMaterial color="#fed7aa" />
-                </mesh>
-            </group>
+                {/* Left Leg */}
+                <group ref={leftLegRef} position={[-0.2, 0.75, 0]}>
+                    <mesh position={[0, -0.35, 0]} castShadow>
+                        <boxGeometry args={[0.22, 0.7, 0.25]} />
+                        <meshStandardMaterial color={outfitSpec.pantsColor} />
+                    </mesh>
+                    <mesh position={[0, -0.72, 0.05]} castShadow>
+                        <boxGeometry args={[0.24, 0.15, 0.35]} />
+                        <meshStandardMaterial color={outfitSpec.shoeColor} />
+                    </mesh>
+                </group>
 
-            {/* Right Arm */}
-            <group ref={rightArmRef} position={[0.45, 1.7, 0]}>
-                <mesh position={[0, -0.3, 0]} castShadow>
-                    <boxGeometry args={[0.2, 0.6, 0.2]} />
-                    <meshStandardMaterial color={outfitSpec.torsoColor} />
-                </mesh>
-                <mesh position={[0, -0.65, 0]}>
-                    <sphereGeometry args={[0.1, 8, 8]} />
-                    <meshStandardMaterial color="#fed7aa" />
-                </mesh>
-            </group>
-
-            {/* Left Leg */}
-            <group ref={leftLegRef} position={[-0.2, 0.75, 0]}>
-                <mesh position={[0, -0.35, 0]} castShadow>
-                    <boxGeometry args={[0.22, 0.7, 0.25]} />
-                    <meshStandardMaterial color={outfitSpec.pantsColor} />
-                </mesh>
-                <mesh position={[0, -0.72, 0.05]} castShadow>
-                    <boxGeometry args={[0.24, 0.15, 0.35]} />
-                    <meshStandardMaterial color={outfitSpec.shoeColor} />
-                </mesh>
-            </group>
-
-            {/* Right Leg */}
-            <group ref={rightLegRef} position={[0.2, 0.75, 0]}>
-                <mesh position={[0, -0.35, 0]} castShadow>
-                    <boxGeometry args={[0.22, 0.7, 0.25]} />
-                    <meshStandardMaterial color={outfitSpec.pantsColor} />
-                </mesh>
-                <mesh position={[0, -0.72, 0.05]} castShadow>
-                    <boxGeometry args={[0.24, 0.15, 0.35]} />
-                    <meshStandardMaterial color={outfitSpec.shoeColor} />
-                </mesh>
+                {/* Right Leg */}
+                <group ref={rightLegRef} position={[0.2, 0.75, 0]}>
+                    <mesh position={[0, -0.35, 0]} castShadow>
+                        <boxGeometry args={[0.22, 0.7, 0.25]} />
+                        <meshStandardMaterial color={outfitSpec.pantsColor} />
+                    </mesh>
+                    <mesh position={[0, -0.72, 0.05]} castShadow>
+                        <boxGeometry args={[0.24, 0.15, 0.35]} />
+                        <meshStandardMaterial color={outfitSpec.shoeColor} />
+                    </mesh>
+                </group>
             </group>
         </group>
     );
