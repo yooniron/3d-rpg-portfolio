@@ -22,6 +22,13 @@ export const useGameStore = create((set, get) => ({
         set({ weather });
     },
 
+    // 3D 포스트 프로세싱 (Bloom & Glow) 효과 제어
+    postProcessingEnabled: true,
+    togglePostProcessing: () => {
+        soundEngine.playClick();
+        set((state) => ({ postProcessingEnabled: !state.postProcessingEnabled }));
+    },
+
     // 3D 플레이어 아바타 드레스룸 의상 & 헤드기어 커스텀
     outfit: 'developer', // 'developer' | 'hoodie' | 'ninja' | 'cyber'
     hat: 'none',        // 'none' | 'cap' | 'headphones' | 'crown'
