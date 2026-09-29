@@ -9,6 +9,9 @@ import { CompanyBuilding } from './buildings/CompanyBuilding';
 import { ArcadeLab } from './buildings/ArcadeLab';
 import { MailboxZone } from './buildings/MailboxZone';
 import { NPC } from './NPC';
+import { PostProcessingEffect } from './PostProcessingEffect';
+import { FootstepParticles } from './FootstepParticles';
+import { LandmarkAuraRing } from './LandmarkAuraRing';
 import { npcTemplates } from '../../data/npcTemplates';
 import { useGameStore } from '../../stores/useGameStore';
 
@@ -39,6 +42,12 @@ export const TownScene = () => {
 
                 {/* 3D 동적 파티클 날씨 에미터 (빗줄기, 눈송이, 벚꽃잎, 먼지) */}
                 <WeatherParticles />
+
+                {/* 플레이어 이동 지면 풋스텝 먼지 파티클 */}
+                <FootstepParticles />
+
+                {/* 랜드마크 건물 근접 시 지면 3D 빛 아우라 링 */}
+                <LandmarkAuraRing />
 
                 {/* 마우스 지면 클릭 이동 감지 레이캐스트 평면 */}
                 <mesh
@@ -107,6 +116,9 @@ export const TownScene = () => {
 
                 {/* 플레이어 아바타 및 컨트롤러 */}
                 <Player />
+
+                {/* 3D 포스트 프로세싱 (Bloom & Glow, Vignette) 이펙트 */}
+                <PostProcessingEffect />
             </Canvas>
         </div>
     );

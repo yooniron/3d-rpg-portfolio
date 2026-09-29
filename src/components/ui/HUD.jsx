@@ -10,6 +10,7 @@ import {
     CloudRain,
     Snowflake,
     Sparkles,
+    Zap,
     Shirt,
     Compass,
     Trophy,
@@ -28,6 +29,8 @@ export const HUD = () => {
     const setTimeOfDay = useGameStore((state) => state.setTimeOfDay);
     const weather = useGameStore((state) => state.weather);
     const setWeather = useGameStore((state) => state.setWeather);
+    const postProcessingEnabled = useGameStore((state) => state.postProcessingEnabled);
+    const togglePostProcessing = useGameStore((state) => state.togglePostProcessing);
     const nearbyBuilding = useGameStore((state) => state.nearbyBuilding);
     const openModal = useGameStore((state) => state.openModal);
     const teleportTo = useGameStore((state) => state.teleportTo);
@@ -126,6 +129,15 @@ export const HUD = () => {
                         {weather === 'rain' && <CloudRain size={17} color="#38bdf8" />}
                         {weather === 'snow' && <Snowflake size={17} color="#e2e8f0" />}
                         {weather === 'sakura' && <Sparkles size={17} color="#f472b6" />}
+                    </button>
+
+                    {/* 3D 포스트 프로세싱 (Bloom & Glow) 이펙트 토글 */}
+                    <button
+                        className="glass-btn icon-btn"
+                        onClick={togglePostProcessing}
+                        title={`그래픽 포스트 프로세싱 (Bloom & Glow) ${postProcessingEnabled ? '켜짐' : '꺼짐'}`}
+                    >
+                        <Zap size={17} color={postProcessingEnabled ? '#a855f7' : '#64748b'} />
                     </button>
 
                     {/* 오디오 BGM 및 사운드 효과음 토글 */}
