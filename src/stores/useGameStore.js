@@ -75,6 +75,7 @@ export const useGameStore = create((set, get) => ({
     activeNPC: null, // null | npcTemplate 객체
     nearbyNPC: null, // 근접한 NPC 객체
     talkedNPCs: [],  // 대화를 완료한 NPC ID 목록
+    npcChatLogs: {}, // { [npcId]: Array<{ id, sender: 'user'|'npc', text, timestamp }> }
     setNearbyNPC: (npc) => {
         const current = get().nearbyNPC;
         if (npc && (!current || current.id !== npc.id)) {
@@ -99,6 +100,22 @@ export const useGameStore = create((set, get) => ({
                 questPoints: questPoints + 50
             });
         }
+    },
+    addNPCChatMessage: (npcId, sender, text) => {
+        const { npcChatLogs } = get();
+        const logs = npcChatLogs[npcId] || [];
+        const newMessage = {
+            id: Date.now() + '-' + Math.random().toString(36).substring(2, 6),
+            sender,
+            text,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        set({
+            npcChatLogs: {
+                ...npcChatLogs,
+                [npcId]: [...logs, newMessage]
+            }
+        });
     },
 
     // 근접 감지 및 상호작용
