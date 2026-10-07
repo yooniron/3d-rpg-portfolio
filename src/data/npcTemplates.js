@@ -14,7 +14,16 @@ export const npcTemplates = [
         position: [-8, 0, -5],
         color: "#38bdf8",
         avatar: "🧙‍♂️",
+        patrolRadius: 5.0,
+        speed: 1.2,
         greeting: "반갑네! 노윤철 개발자의 엔터프라이즈 아키텍처와 DB 튜닝 노하우에 대해 궁금한 점이 있나?",
+        systemPrompt: "너는 3D 포트폴리오 타운의 백엔드 & 대용량 DB 아키텍처 원로 멘토다. 노윤철 개발자의 Oracle/Tibero DB 튜닝, SQL 최적화, CS 기초 및 소프트웨어 설계 철학을 친절하고 지혜롭게 답변해라.",
+        ambientQuotes: [
+            "음... 이 SQL 인덱스를 재구획하면 응답속도가 더 빨라질 텐데!",
+            "단순히 코드를 짜는 것보다 비즈니스 문제를 해결하는 게 진짜 개발자지.",
+            "아키텍처 설계는 기초 CS 지식이 탄탄해야 흔들리지 않는다네.",
+            "오늘도 3D 타운을 둘러보며 배울 점을 찾아보는 중이라네."
+        ],
         dialogues: [
             {
                 id: "mentor-q1",
@@ -40,7 +49,16 @@ export const npcTemplates = [
         position: [8, 0, 5],
         color: "#f59e0b",
         avatar: "💼",
+        patrolRadius: 6.0,
+        speed: 1.5,
         greeting: "안녕하세요! 개발자 노윤철 님의 실무 프로젝트 성과와 온보딩 CLI 개발 스토리가 궁금하신가요?",
+        systemPrompt: "너는 열정적인 IT 채용 스카우터이자 분석가다. 노윤철 개발자의 Node.js 온보딩 CLI 자동화 도구 개발 성과(시간 90% 단축), ENTP 협업 소통 스타일, 풀스택/백엔드 이력 하이라이트를 프로페셔널하게 소개해라.",
+        ambientQuotes: [
+            "팀 온보딩 시간을 2시간에서 10분으로 줄인 CLI 도구라니, 정말 놀랍죠!",
+            "솔직하고 건설적인 협업 문화를 선호하는 인재를 찾고 계신가요?",
+            "오늘도 훌륭한 구직자와 성장하는 팀의 매칭을 탐색 중입니다!",
+            "실무 경험과 가치 창출에 집중하는 노윤철 개발자입니다."
+        ],
         dialogues: [
             {
                 id: "recruiter-q1",
@@ -66,7 +84,16 @@ export const npcTemplates = [
         position: [0, 0, 10],
         color: "#10b981",
         avatar: "🤖",
+        patrolRadius: 4.0,
+        speed: 1.0,
         greeting: "삐빅! 3D WebGL 포트폴리오 및 Subway Quiz Realtime 서비스 기술 매트릭스를 안내합니다!",
+        systemPrompt: "너는 3D RPG 포트폴리오 타운의 시스템 데브봇 AI다. 로봇처럼 '삐빅!' 소리와 유쾌한 말투를 사용하며, Three.js 60FPS 최적화, Supabase Realtime 지하철 퀴즈 1v1 동기화, GitHub Actions CI/CD에 대해 설명해라.",
+        ambientQuotes: [
+            "삐빅! 현재 타운 프레임 레이트 60 FPS 정상 유지 중!",
+            "삐빅! Subway Quiz 소켓 지연 시간 50ms 미만 감지 완료!",
+            "삐빅! GitHub Actions 파이프라인 자동 테스트 통과 확인!",
+            "삐빅! 타운 시스템 스캔 중... 방문객 접근 감지!"
+        ],
         dialogues: [
             {
                 id: "devbot-q1",
